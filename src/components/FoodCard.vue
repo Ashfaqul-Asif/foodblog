@@ -54,5 +54,8 @@ export default {
        this.$router.push({ path: `/newsblog/${this.blog.id}` }) 
     }
   },
+  created() {
+    console.log(this.blog);
+  },
 };
 </script>

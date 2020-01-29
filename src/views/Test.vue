@@ -22,27 +22,63 @@
             <div>
                 a={{a}},b={{b}}
             </div>
+            <div>
+             <div class="demo">
+              <p v-if=show>You can see me </p>
+               <p>do you also se me</p>
+               <button @click="show=!show">switch</button>
+             </div>
+             <input type="text" v-model="firstname" placeholder="type.......">
+            </div>
+           <!--  <div >
+              <li v-for="person in persons" :key="person.name" >{{person.name}}</li>
+            </div> -->
+            <div>
+                <ul>
+                    <li v-for="(person,index) in persons" :key= index  >
+                        {{person.name}}
+
+                    </li>
+                </ul>
+            </div>
+        
 
 
-
-
+                                                                                
         </v-container>
+        <v-container>
+            <customButton @onclick="onClickCustomButton" :size="'small'" :color="'red'"/>
+        </v-container>
+        
     </div>
 </template>
 
 <script>
+import customButton from '@/views/customButton'
     export default {
+        components:{
+          customButton
+        },
         data() {
             return {
+                persons:[
+                  {name:'asif',age:'20'},
+                  {name:'anik',age:40}
+                ],
                 title: '',
                 link: 'https://www.google.com',
                 count:0,
                 x:0,
                 y:0,
-                a:1
-                
-            }
+                a:1,
+                firstname:'',
+                lastname:'',
+                show:true,
+            
+            } 
         },
+      
+       
         computed: {
                 b:function(){
                     return this.a+10
@@ -69,7 +105,20 @@
                 this.y = event.clientY;
 
             },
+            onclick:function(){
+                  console.log(ksaldsalkdksa);
+            },
+            onClickCustomButton(event){
+               console.log(event);
+            }
+
         },
+         watch: {  
+                firstname(params) {
+                    console.log(this);
+                }
+
+            }
     }
 </script>
 

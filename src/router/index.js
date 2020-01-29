@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import AddFoodBlog from '../views/AddFoodBlog'
 import Newsblog from '../views/Newsblog'
 import Test from '../views/Test'
+import customButton from '../views/customButton'
 
 Vue.use(VueRouter)
 
@@ -32,6 +33,10 @@ const routes = [
     name: '',
     component:Test,
    
+  },
+  {
+     path:'/custombutton',
+     component:customButton,
   }
 ]
 
