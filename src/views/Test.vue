@@ -40,14 +40,11 @@
 
                     </li>
                 </ul>
-            </div>
-        
-
-
-                                                                                
+            </div>                                                                            
         </v-container>
         <v-container>
-            <customButton @onclick="onClickCustomButton" :size="'small'" :color="'red'"/>
+            <customButton @onclick="onClickCustomButton" :size="'small'" :color=" 'black'" :text=" 'dsdsad' " :round="'ra3'"/>
+            <customform  @onchange="onClickForm" :type="'text'"  />
         </v-container>
         
     </div>
@@ -55,9 +52,10 @@
 
 <script>
 import customButton from '@/views/customButton'
+import customform from '@/views/customform'
     export default {
         components:{
-          customButton
+          customButton,customform
         },
         data() {
             return {
@@ -74,11 +72,9 @@ import customButton from '@/views/customButton'
                 firstname:'',
                 lastname:'',
                 show:true,
-            
+                customvalue:''
             } 
-        },
-      
-       
+        },  
         computed: {
                 b:function(){
                     return this.a+10
@@ -110,6 +106,12 @@ import customButton from '@/views/customButton'
             },
             onClickCustomButton(event){
                console.log(event);
+            },
+            
+            onClickForm(event){
+                this.customvalue=event
+              
+              console.log(this.customvalue);
             }
 
         },

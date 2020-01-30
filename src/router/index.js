@@ -5,6 +5,7 @@ import AddFoodBlog from '../views/AddFoodBlog'
 import Newsblog from '../views/Newsblog'
 import Test from '../views/Test'
 import customButton from '../views/customButton'
+import customform from '@/views/customform'
 
 Vue.use(VueRouter)
 
@@ -37,7 +38,13 @@ const routes = [
   {
      path:'/custombutton',
      component:customButton,
+  },
+  {
+
+    path:'/customform',
+    component:customform,
   }
+  
 ]
 
 const router = new VueRouter({
