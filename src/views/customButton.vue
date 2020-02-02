@@ -49,8 +49,6 @@ export default {
   padding: 10px 30px;
   font-size: 9px;
 }
-
-
 .size-large {
   border: none;
   padding: 10px 30px;

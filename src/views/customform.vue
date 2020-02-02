@@ -1,10 +1,7 @@
 <template>
   <div>
-    <v-container>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore, tempore. Neque repudiandae adipisci tenetur eligendi at illum explicabo dolore recusandae earum, incidunt debitis, natus facere nobis ex omnis dignissimos rerum?</p>
-      
+    <v-container> 
       <form>
-          <p>name</p>
         <input v-model="text" @keyup="$emit('onchange',text)"  :type="type" :placeholder="placeholder" />
       </form>
     </v-container>
@@ -15,14 +12,19 @@
 export default {
   data() {
     return {
-      text:''
+      text:this.default
     };
   },
   props: {
     type: String,
-    placeholder:String
-    
-  }
+    placeholder:String,
+    default:String
+  },
+  watch: {
+    default(){
+        this.text=this.default
+    }
+  },
 };
 </script>
 
