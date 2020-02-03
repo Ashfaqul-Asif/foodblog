@@ -44,24 +44,28 @@
         :size="'small'"
         :color="comboInput"
         :text=" 'click' "
-        :round="'ra3'"
+        :round="radioInput"
       />
       <customform @onchange="onClickForm" :type="'text'" :placeholder="''" :default=" customvalue1 " />
       <customform  @onchange="onClickForm" :placeholder="''" :default=" customvalue2 "  />
       <combo @click="onComboClick"/>
+      <radiobutton @change="onRadioButton"/>
     </v-container>
   </div>
 </template>
 
 <script>
+import {mapGetters} from vuex
 import customButton from "@/views/customButton";
 import customform from "@/views/customform";
 import combo from "@/views/combo"
+import radiobutton from "@/views/radiobutton"
 export default {
   components: {
     customButton,
     customform,
-    combo
+    combo,
+    radiobutton
   },
   data() {
     return {
@@ -80,7 +84,8 @@ export default {
       show: true,
       customvalue1: "",
       customvalue2: "",
-      comboInput:""
+      comboInput:"",
+      radioInput:""
     };
    
   },
@@ -122,14 +127,18 @@ export default {
       console.log(this.customvalue1);
       console.log(this.customvalue2);
     },
-    onComboClick(){
-        console.log(event.target.innerText);
-        this.comboInput=event.target.innerText
-        console.log(this.comboInput);
-       
+    onComboClick(value){
         
+        this.comboInput=value
+      
+    },
+    onRadioButton(event){
+      
+      this.radioInput=event
+      console.log(this.radioInput);
+
     }
-   
+  
   },
   watch: {
     firstname(params) {

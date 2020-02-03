@@ -7,7 +7,7 @@
         <p>Overflow</p>
 
         <v-combobox
-          @change="$emit('click',$event)"
+          @change="setColor"
           class="my-2"
           :items="dropdown_font"
           label="Colors"
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+ import {mapMutations} from 'vuex'
   export default {
     data: () => ({
       dropdown_font: ['red','black', 'white'],
@@ -26,5 +27,8 @@
         { text: 'list', callback: () => console.log('list') },
       ],
     }),
+    methods: {
+     ...mapMutations("custom",["setColor"]),
+    }
   }
 </script>

@@ -4,6 +4,7 @@ import db from '@/firebaseInit'
 
 Vue.use(Vuex)
 import product from './modules/product'
+import custom from './modules/custom'
 
 export default new Vuex.Store({
   state: {
@@ -13,6 +14,6 @@ export default new Vuex.Store({
   actions: {
   },
   modules: {
-    product
+    product,custom
   }
 })

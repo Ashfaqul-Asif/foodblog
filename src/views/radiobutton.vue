@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-radio-group v-model="radioGroup">
-      <v-radio v-for="n in 3" :key="n" :label="`Radio ${n}`" :value="n"></v-radio>
+    <v-radio-group @change="$emit('change',$event)" v-model="radioGroup">
+      <v-radio  v-for="(arr,index) in array" :key="`fruit-${index}`" :label="` ${arr}`" :value="arr"></v-radio>
     </v-radio-group>
   </div>
 </template>
@@ -10,7 +10,8 @@
 export default {
   data() {
     return {
-      radioGroup: 1
+      radioGroup: 'ra1',
+      array:["ra1","ra2","ra3"]
     };
   }
 };
