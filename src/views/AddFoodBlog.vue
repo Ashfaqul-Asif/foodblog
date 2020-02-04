@@ -86,6 +86,7 @@ import { db,storage } from "../firebaseInit"
            console.log(this);
            console.log(this.image);
           task.snapshot.ref.getDownloadURL().then(downloadURL=>{
+            console.log(downloadURL);
             this.image = downloadURL
           console.log('File available at', this.image);
   })})

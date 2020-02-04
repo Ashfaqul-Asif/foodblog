@@ -39,33 +39,34 @@
       </div>
     </v-container>
     <v-container>
-      <customButton
+     <!--  <customButton
         @onclick="onClickCustomButton"
         :size="'small'"
-        :color="comboInput"
+        :color="getColors"
         :text=" 'click' "
         :round="radioInput"
-      />
+      /> -->
       <customform @onchange="onClickForm" :type="'text'" :placeholder="''" :default=" customvalue1 " />
       <customform  @onchange="onClickForm" :placeholder="''" :default=" customvalue2 "  />
-      <combo @click="onComboClick"/>
+      
       <radiobutton @change="onRadioButton"/>
     </v-container>
   </div>
 </template>
 
 <script>
-import {mapGetters} from vuex
+import { mapGetters } from 'vuex'
+import list from "@/views/list"
 import customButton from "@/views/customButton";
 import customform from "@/views/customform";
-import combo from "@/views/combo"
-import radiobutton from "@/views/radiobutton"
+
+import radiobutton from "@/components/radiobutton"
 export default {
   components: {
     customButton,
     customform,
-    combo,
-    radiobutton
+    radiobutton,
+    list
   },
   data() {
     return {
@@ -92,7 +93,8 @@ export default {
   computed: {
     b: function() {
       return this.a + 10;
-    }
+    },
+      ...mapGetters('custom',['getColors'])
   },
   methods: {
     changeTitle: function(event) {
@@ -137,8 +139,10 @@ export default {
       this.radioInput=event
       console.log(this.radioInput);
 
-    }
-  
+    },
+  },
+  created() {
+    
   },
   watch: {
     firstname(params) {

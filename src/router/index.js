@@ -6,6 +6,7 @@ import Newsblog from '../views/Newsblog'
 import Test from '../views/Test'
 import customButton from '../views/customButton'
 import customform from '@/views/customform'
+import Dashboard from '@/components/Dashboard'
 
 Vue.use(VueRouter)
 
@@ -43,7 +44,12 @@ const routes = [
 
     path:'/customform',
     component:customform,
+  },
+  {
+    path:'/Dashboard',
+    component:Dashboard,
   }
+ 
   
 ]
 

@@ -1,8 +1,11 @@
 const state={
-   colors:''
+   colors:'',
+   radioInput:''
+   
 }
 const getters={
-  getColors:state=>state.colors
+  getColors:state=>state.colors,
+  getRadioInput:state=>state.radioInput
 }
 const actions={
 
@@ -10,6 +13,9 @@ const actions={
 const mutations={
        setColor:(state,paylaod)=>{
         state.colors=paylaod
+       },
+       setRadioInput:(state,payload)=>{
+         state.radioInput=payload
        }
 }
 
