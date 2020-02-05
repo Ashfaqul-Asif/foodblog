@@ -1,5 +1,6 @@
 <template>
- <v-container>
+ <v-container >
+   <h2 class="light-blue--text" style=" text-align: center ">Admin panel</h2>
        <v-form
     ref="form"
     v-model="valid"
@@ -49,7 +50,7 @@ import { db,storage } from "../firebaseInit"
       valid: true,
       title: '',
       subtitle: '',
-      image:'',
+      image:[],
       select: null,
       textarea: ''
       
@@ -87,11 +88,14 @@ import { db,storage } from "../firebaseInit"
            console.log(this.image);
           task.snapshot.ref.getDownloadURL().then(downloadURL=>{
             console.log(downloadURL);
-            this.image = downloadURL
+            this.image.push(downloadURL)
           console.log('File available at', this.image);
   })})
          
        }
+      },
+      created() {
+        console.log(this.image);
       },
       reset () {
         this.$refs.form.reset()
@@ -102,8 +106,7 @@ import { db,storage } from "../firebaseInit"
         title: this.title,
         subtitle: this.subtitle,
         textarea: this.textarea,
-        image: this.image
-        
+        image:this.image
       })
       
      .then(function(docRef) {

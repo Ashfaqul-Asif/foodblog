@@ -1,56 +1,13 @@
 <template>
+  
   <div>
-    <v-container v-on:mousemove="updateCoordinates">
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate autem iste facilis in pariatur?
-        Consequatur facere illum quasi nobis laborum consequuntur alias molestiae dolores, quae ea saepe maxime
-        enim animi?
-      </p>
-      <input type="text" placeholder="input" @input="changeTitle" />
+    <h1>Grid System</h1>
+    <v-container class="my-5">
+        <v-flex xs12 sm6>
 
-      {{title}}
-      <p>{{sayhello()}}</p>
-      <p>
-        <a v-bind:href="link"></a>
-      </p>
-
-      <div>
-        <v-btn v-on:click="increase(10)" small>click</v-btn>
-        <p>{{count}}</p>
-      </div>
-
-      <p v-on:mousemove="updateCoordinates">Coordinates:{{x}} /{{y}}</p>
-      <div>a={{a}},b={{b}}</div>
-      <div>
-        <div class="demo">
-          <p v-if="show">You can see me</p>
-          <p>do you also se me</p>
-          <button @click="show=!show">switch</button>
-        </div>
-        <input type="text" v-model="firstname" placeholder="type......." />
-      </div>
-      <!--  <div >
-              <li v-for="person in persons" :key="person.name" >{{person.name}}</li>
-      </div>-->
-      <div>
-        <ul>
-          <li v-for="(person,index) in persons" :key="index">{{person.name}}</li>
-        </ul>
-      </div>
+        </v-flex>
     </v-container>
-    <v-container>
-     <!--  <customButton
-        @onclick="onClickCustomButton"
-        :size="'small'"
-        :color="getColors"
-        :text=" 'click' "
-        :round="radioInput"
-      /> -->
-      <customform @onchange="onClickForm" :type="'text'" :placeholder="''" :default=" customvalue1 " />
-      <customform  @onchange="onClickForm" :placeholder="''" :default=" customvalue2 "  />
-      
-      <radiobutton @change="onRadioButton"/>
-    </v-container>
+   
   </div>
 </template>
 
@@ -62,7 +19,7 @@ import customform from "@/views/customform";
 
 import radiobutton from "@/components/radiobutton"
 export default {
-  components: {
+ /*  components: {
     customButton,
     customform,
     radiobutton,
@@ -148,7 +105,7 @@ export default {
     firstname(params) {
       console.log(this);
     }
-  }
+  } */
 };
 </script>
 

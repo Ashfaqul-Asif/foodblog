@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark>  
+    <v-app-bar app color="teal lighten-3" >  
       <v-app-bar-nav-icon @click="drawer=!drawer"></v-app-bar-nav-icon>
     </v-app-bar>
 

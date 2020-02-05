@@ -1,7 +1,11 @@
 <template>
-  <div class="home d-flex flex-wrap">
-    <FoodCard v-for="blog in getBlogs" :key="blog.id" :blog="blog" />
-  </div>
+<div class="cyan lighten-5">
+<v-container>
+  <v-layout class="d-flex flex-wrap" >
+  <FoodCard class="mx-2 my-2" v-for="blog in getBlogs" :key="blog.id" :blog="blog" />
+  </v-layout>
+  </v-container>
+</div>
 </template>
 
 <script>
