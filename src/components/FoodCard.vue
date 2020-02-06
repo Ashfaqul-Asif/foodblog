@@ -1,7 +1,7 @@
 <template>
  
     <v-card width="350px">
-      <v-img class="white--text align-end"  height="40vh" :src="blog.image[0]">
+      <v-img  @click="deleteImage"  class="white--text align-end"  height="40vh" :src="blog.image[0]">
         <v-card-title>
       <!--     <div>
             {{blog.title}}
@@ -46,6 +46,9 @@
         this.$router.push({
           path: `/newsblog/${this.blog.id}`
         })
+      },
+      deleteImage(){
+        console.log(event);
       }
     },
     created() {
