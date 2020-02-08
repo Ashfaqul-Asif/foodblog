@@ -1,13 +1,8 @@
 <template>
   
   <div>
-    <h1>Grid System</h1>
-    <v-container class="my-5">
-        <v-flex xs12 sm6>
-
-        </v-flex>
-    </v-container>
-   
+    
+  <system/>
   </div>
 </template>
 
@@ -18,12 +13,16 @@ import customButton from "@/views/customButton";
 import customform from "@/views/customform";
 
 import radiobutton from "@/components/radiobutton"
+import system from "@/components/system"
+
 export default {
- /*  components: {
+  components: {
     customButton,
     customform,
     radiobutton,
-    list
+    list,
+    system
+ 
   },
   data() {
     return {
@@ -105,7 +104,7 @@ export default {
     firstname(params) {
       console.log(this);
     }
-  } */
+  } 
 };
 </script>
 
