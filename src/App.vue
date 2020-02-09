@@ -1,7 +1,10 @@
 <template>
   <v-app>
-    <v-app-bar app color="teal lighten-3" >  
+    <v-app-bar app color="white" >  
       <v-app-bar-nav-icon @click="drawer=!drawer"></v-app-bar-nav-icon>
+            <v-btn @click="login()" class="btn" small color="primary" fab dark>
+              <v-icon>mdi-account-circle</v-icon>
+            </v-btn>
     </v-app-bar>
 
     <v-content>
@@ -67,8 +70,19 @@
         if (this.$router.history.current.path !== item.route) {
           this.$router.push( item.route );
         }
-     
+     },
+     login(){
+       console.log(event);
+       if (this.$router.history.current.path !== '/signup') {
+          this.$router.push( '/signup' );
+          
+        }
      }
     },
   };
 </script>
+<style >
+  .btn{
+    left: 90%;
+  }
+</style>

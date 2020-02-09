@@ -7,6 +7,8 @@ import Test from '../views/Test'
 import customButton from '../views/customButton'
 import customform from '@/views/customform'
 import Dashboard from '@/components/Dashboard'
+import signup from '@/authentication/signup'
+import login from '@/authentication/login'
 
 Vue.use(VueRouter)
 
@@ -31,10 +33,16 @@ const routes = [
    
   },
   {
-    path:'/test',
+    path:'/signup',
     name: '',
-    component:Test,
+    component:signup,
    
+  },
+  {
+    path:'/login',
+    name: '',
+    component:login,
+
   },
   {
      path:'/custombutton',

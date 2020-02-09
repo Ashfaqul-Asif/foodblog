@@ -1,0 +1,90 @@
+<template>
+  <v-container>
+    <div class="justify-center d-flex my-9">
+      <v-card outlined width="80vh" height="100%" class="px-6 py-4">
+        <v-card-title class="title text justify-center mx-auto my-auto">Login</v-card-title>
+        <v-form ref="form" v-model="valid" lazy-validation>
+          <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
+          <v-text-field
+            autocomplete="current-password"
+            :value="password"
+            label="Enter password"
+            hint="Your password passed! Password rules are not meant to be broken!"
+            :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
+            @click:append="() => (value = !value)"
+            :type="value ? 'password' : 'text'"
+            :rules="passwordRules"
+            @input="_=>password=_"
+          ></v-text-field>
+          <v-divider class="mx-4 my-4"></v-divider>
+          <v-checkbox
+            v-model="checkbox"
+            :rules="[v => !!v || 'You must agree to continue!']"
+            label="Do you agree?"
+            required
+          ></v-checkbox>
+
+          <v-btn :disabled="!valid" color="#42A5F5" class="mr-4 white--text" @click="login">Login</v-btn>
+          <v-btn @click="$router.push( '/signup' )" class="btn">Create Account</v-btn>
+        </v-form>
+      </v-card>
+    </div>
+  </v-container>
+</template>
+
+<script>
+import { db, storage } from "../firebaseInit";
+export default {
+  data: () => ({
+    valid: true,
+    value: true,
+    email: "",
+    emailRules: [
+      v => !!v || "E-mail is required",
+      v => /.+@.+\..+/.test(v) || "E-mail must be valid"
+    ],
+    select: null,
+    password: "",
+    passwordRules: [
+      v => !!v || "Password is required",
+      v =>
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/.test(
+          v
+        ) ||
+        "Min. 8 characters with at least one capital letter, a number and a special character."
+    ],
+    checkbox: false
+  }),
+  methods: {
+    login: function() {
+      db.collection("registration")
+        .where("password", "==", this.password).where("email","==",this.email)
+        .get()
+        .then(snapshot=>{
+            console.log(snapshot.empty);
+            if (snapshot.empty) {
+                console.log("wrong password or email");
+            }
+            else{
+                console.log("login Successfull");
+                this.$router.push( '/' );
+            }
+        })
+        .catch(function(error) {
+          console.log("Error getting documents: ", error);
+        });
+    }
+  }
+};
+</script>
+<style  scoped>
+.title {
+  background-color: #42a5f5;
+
+  color: white;
+}
+.btn {
+  left: 260px;
+}
+</style> >
+  

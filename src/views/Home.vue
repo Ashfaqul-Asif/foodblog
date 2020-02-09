@@ -1,5 +1,5 @@
 <template>
-<div class="cyan lighten-5">
+<div class="home">
 <v-container>
   <v-layout class="d-flex flex-wrap" >
   <FoodCard class="mx-2 my-2" v-for="blog in getBlogs" :key="blog.id" :blog="blog" />
@@ -36,5 +36,7 @@ export default {
 </script>
 
 <style  scoped>
-
+.home{
+  background-color: #F4F5F7
+}
 </style>

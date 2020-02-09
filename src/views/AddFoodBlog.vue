@@ -52,7 +52,8 @@ import { db,storage } from "../firebaseInit"
       subtitle: '',
       image:[],
       select: null,
-      textarea: ''
+      textarea: '',
+      isAdmin:false
       
     }),
 
