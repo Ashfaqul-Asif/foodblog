@@ -1,22 +1,40 @@
 <template>
   <v-container>
-    <v-card  class="overflow-hidden pb-10">
+    <v-card class="overflow-hidden pb-10">
       <v-row class="mx-4">
-        <v-img @click="deleteImage(index)"  v-for="(src, index) in src" :key="index" class="mx-1 my-5" height="35vh" :src="src"></v-img>
+        <v-img
+          @click="deleteImage(index)"
+          v-for="(src, index) in src"
+          :key="index"
+          class="mx-1 my-5"
+          height="35vh"
+          :src="src"
+        ></v-img>
       </v-row>
-      <div class="mx-3" >
-        <v-card-title v-if="!editTitlefield" @dblclick="editTitlefield=true" >{{title}}</v-card-title>
-        <v-text-field v-else @dblclick="editTitlefield=false" v-model="title" label="edit title"></v-text-field>
-        <div class="my-2">
+      <div class="ml-6">
+        <input type="file" @change="uploadFiles" multiple />
       </div>
-        <v-card-subtitle v-if="!editSubtitlefield" @dblclick="editSubtitlefield=true"  class="pt-1">{{subtitle}}</v-card-subtitle>
-        <v-text-field v-else @dblclick="editSubtitlefield=false" label="Edit subtitle" v-model="subtitle" ></v-text-field>
+      <div class="mx-3">
+        <v-card-title v-if="!editTitlefield" @dblclick="editTitlefield=true">{{title}}</v-card-title>
+        <v-text-field v-else @dblclick="editTitlefield=false" v-model="title" label="edit title"></v-text-field>
+        <div class="my-2"></div>
+        <v-card-subtitle
+          v-if="!editSubtitlefield"
+          @dblclick="editSubtitlefield=true"
+          class="pt-1"
+        >{{subtitle}}</v-card-subtitle>
+        <v-text-field
+          v-else
+          @dblclick="editSubtitlefield=false"
+          label="Edit subtitle"
+          v-model="subtitle"
+        ></v-text-field>
         <v-divider class="mx-4 my-4"></v-divider>
-        <v-card-text >
+        <v-card-text>
           <div v-if="!editTextareafield" @dblclick="editTextareafield=true">{{textarea}}</div>
 
           <div v-else @dblclick="editTextareafield=false">
-          <v-textarea  label="Edit textarea" v-model="textarea" ></v-textarea>
+            <v-textarea label="Edit textarea" v-model="textarea"></v-textarea>
           </div>
         </v-card-text>
       </div>
@@ -28,26 +46,42 @@
 </template>
 
 <script>
-import { db } from "@/firebaseInit";
+import { db, storage } from "@/firebaseInit";
 import { mapGetters, mapActions } from "vuex";
-import { functions } from 'firebase';
+import { functions } from "firebase";
 export default {
   data() {
     return {
       title: "",
       subtitle: "",
       textarea: "",
-      src: "",
-      editTitlefield:false,
-      editSubtitlefield:false,
-      editTextareafield:false,
-      editblog:false
+      src: [],
+      editTitlefield: false,
+      editSubtitlefield: false,
+      editTextareafield: false,
+      editblog: false,
+      blogref: {},
+      image: []
     };
   },
   watch: {
-    editTitlefield(newValue){
-     console.log(this.title);
+    editTitlefield(newValue) {
+      console.log(this.title);
       console.log("new value -", newValue);
+      this.blogref.update({
+        title: this.title
+      });
+    },
+    editSubtitlefield(newValue) {
+      console.log();
+      this.blogref.update({
+        subtitle: this.subtitle
+      });
+    },
+    editTextareafield() {
+      this.blogref.update({
+        textarea: this.textarea
+      });
     }
   },
   methods: {
@@ -55,28 +89,67 @@ export default {
       db.collection("addBlogs")
         .doc(this.$route.params.id)
         .delete()
-        .then(()=> {
+        .then(() => {
           console.log("Document successfully deleted!");
-          this.$router.go(-1)
+          this.$router.go(-1);
           console.log(this.$router);
         })
         .catch(function(error) {
           console.error("Error removing document: ", error);
         });
     },
-    editTitle(){
 
+    uploadFiles(event) {
+      console.log(storage);
+      console.log(event.target.files);
+      for (let i = 0; i < event.target.files.length; i++) {
+        let imagefile = event.target.files[i];
+
+        let storageRef = storage.ref("image" + imagefile.name);
+
+        let task = storageRef.put(imagefile);
+        console.log(this);
+        task.on(
+          "state_changed",
+          snapshot => {
+            console.log(this);
+            console.log(snapshot);
+            let percentage =
+              (snapshot.bytesTransferred / snapshot.totalbytes) * 100;
+            console.log("upload is" + percentage + "%done");
+          },
+          error => {
+            console.log(this);
+            console.log(error);
+          },
+          () => {
+            console.log(this);
+            console.log(this.image);
+            task.snapshot.ref.getDownloadURL().then(downloadURL => {
+              console.log(downloadURL);
+              this.src.push(downloadURL);
+              console.log("File available at", this.image);
+              this.blogref.update({
+                image: this.src
+              });
+            });
+          }
+        );
+      }
     },
-    deleteImage(index){ 
-      this.src.splice(index,1)
-      console.log(this.src);
-      db.collection("addBlogs").doc(this.$route.params.id).get().then(doc=>{
-        console.log(doc);
-        doc.ref.update({
-          image:this.src
-        })
 
-      })
+    deleteImage(index) {
+      this.src.splice(index, 1);
+      console.log(this.src);
+      db.collection("addBlogs")
+        .doc(this.$route.params.id)
+        .get()
+        .then(doc => {
+          console.log(doc);
+          doc.ref.update({
+            image: this.src
+          });
+        });
     }
   },
   computed: {},
@@ -84,9 +157,12 @@ export default {
     console.log(this.$route.params.id);
     let that = this;
     db.collection("addBlogs")
+
       .doc(this.$route.params.id)
       .get()
       .then(function(doc) {
+        console.log(doc.ref);
+        that.blogref = doc.ref;
         let Data = doc.data();
         // doc.data() is never undefined for query doc snapshots
         that.subtitle = Data.subtitle;
@@ -96,6 +172,7 @@ export default {
         console.log(Data);
         console.log(Data.image);
         console.log(that.src);
+        console.log(that.blogref);
       })
       .catch(function(error) {
         console.log("Error getting documents: ", error);
@@ -108,5 +185,11 @@ export default {
 .fab {
   bottom: 3px;
   right: 10px;
+}
+.input {
+  display: hidden;
+}
+.upload {
+  visibility: hidden;
 }
 </style>
