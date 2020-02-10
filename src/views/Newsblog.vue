@@ -11,34 +11,29 @@
           :src="src"
         ></v-img>
       </v-row>
-      <div class="ml-6">
+      <div class="ml-6" v-if="getisAdmin">
         <input type="file" @change="uploadFiles" multiple />
       </div>
       <div class="mx-3">
-        <v-card-title v-if="!editTitlefield" @dblclick="editTitlefield=true">{{title}}</v-card-title>
+        <v-card-title v-if="!editTitlefield" @dblclick="editTitle">{{title}}</v-card-title>
         <v-text-field v-else @dblclick="editTitlefield=false" v-model="title" label="edit title"></v-text-field>
         <div class="my-2"></div>
         <v-card-subtitle
           v-if="!editSubtitlefield"
-          @dblclick="editSubtitlefield=true"
+          @dblclick="editSubtitle"
           class="pt-1"
         >{{subtitle}}</v-card-subtitle>
-        <v-text-field
-          v-else
-          @dblclick="editSubtitlefield=false"
-          label="Edit subtitle"
-          v-model="subtitle"
-        ></v-text-field>
+        <v-text-field v-else @dblclick="editSubtitlefield=false" label="Edit subtitle" v-model="subtitle"></v-text-field>
         <v-divider class="mx-4 my-4"></v-divider>
         <v-card-text>
-          <div v-if="!editTextareafield" @dblclick="editTextareafield=true">{{textarea}}</div>
+          <div v-if="!editTextareafield" @dblclick="editTextarea">{{textarea}}</div>
 
           <div v-else @dblclick="editTextareafield=false">
             <v-textarea label="Edit textarea" v-model="textarea"></v-textarea>
           </div>
         </v-card-text>
       </div>
-      <v-btn class="fab" color="red " @click="deleteBlog" dark small absolute fab>
+      <v-btn v-if="getisAdmin" class="fab" color="red " @click="deleteBlog" dark small absolute fab>
         <v-icon>mdi-delete</v-icon>
       </v-btn>
     </v-card>
@@ -61,42 +56,51 @@ export default {
       editTextareafield: false,
       editblog: false,
       blogref: {},
-      image: []
+      image: [],
+      isAdmin: false
     };
   },
   watch: {
     editTitlefield(newValue) {
-      console.log(this.title);
-      console.log("new value -", newValue);
-      this.blogref.update({
-        title: this.title
-      });
+      if (!newValue) {
+        console.log(this.title);
+        console.log("new value -", newValue);
+        this.blogref.update({
+          title: this.title
+        });
+      }
     },
     editSubtitlefield(newValue) {
-      console.log();
-      this.blogref.update({
-        subtitle: this.subtitle
-      });
+      if (!newValue) {
+        console.log();
+        this.blogref.update({
+          subtitle: this.subtitle
+        });
+      }
     },
-    editTextareafield() {
-      this.blogref.update({
-        textarea: this.textarea
-      });
+    editTextareafield(newValue) {
+      if (!newValue) {
+        this.blogref.update({
+          textarea: this.textarea
+        });
+      }
     }
   },
   methods: {
     deleteBlog(event) {
-      db.collection("addBlogs")
-        .doc(this.$route.params.id)
-        .delete()
-        .then(() => {
-          console.log("Document successfully deleted!");
-          this.$router.go(-1);
-          console.log(this.$router);
-        })
-        .catch(function(error) {
-          console.error("Error removing document: ", error);
-        });
+      if (isAdmin) {
+        db.collection("addBlogs")
+          .doc(this.$route.params.id)
+          .delete()
+          .then(() => {
+            console.log("Document successfully deleted!");
+            this.$router.go(-1);
+            console.log(this.$router);
+          })
+          .catch(function(error) {
+            console.error("Error removing document: ", error);
+          });
+      } else return 0;
     },
 
     uploadFiles(event) {
@@ -139,20 +143,39 @@ export default {
     },
 
     deleteImage(index) {
-      this.src.splice(index, 1);
-      console.log(this.src);
-      db.collection("addBlogs")
-        .doc(this.$route.params.id)
-        .get()
-        .then(doc => {
-          console.log(doc);
-          doc.ref.update({
-            image: this.src
+      if (getisAdmin) {
+        this.src.splice(index, 1);
+        console.log(this.src);
+        db.collection("addBlogs")
+          .doc(this.$route.params.id)
+          .get()
+          .then(doc => {
+            console.log(doc);
+            doc.ref.update({
+              image: this.src
+            });
           });
-        });
+      }
+    },
+    editTitle(event) {
+      if (this.getisAdmin) {
+        this.editTitlefield = true;
+      }
+    },
+    editSubtitle(event) {
+      if (this.getisAdmin) {
+        this.editSubtitlefield = true;
+      }
+    },
+     editTextarea(event) {
+      if (this.getisAdmin) {
+        this.editTextareafield = true;
+      }
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters("product", ["getisAdmin"])
+  },
   created() {
     console.log(this.$route.params.id);
     let that = this;
@@ -177,6 +200,7 @@ export default {
       .catch(function(error) {
         console.log("Error getting documents: ", error);
       });
+    console.log(this.getisAdmin);
   }
 };
 </script>

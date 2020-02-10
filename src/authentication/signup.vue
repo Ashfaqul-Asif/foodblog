@@ -73,10 +73,12 @@ export default {
             password: this.password,
             isAdmin: false
           })
+     
           .then(function(docRef) {
             that.$refs.form.reset();
-
+         
             console.log("Document written with ID: ", docRef.id);
+             that.$router.push('/login');
           })
           .catch(function(error) {
             console.error("Error adding document: ", error);

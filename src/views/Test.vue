@@ -1,24 +1,19 @@
 <template>
-  
   <div>
-
-
-  <cutomButton/>
-  <customform/>
-  <radiobutton/>
+    <cutomButton />
+    <customform />
+    <radiobutton />
   </div>
-
-     
-   </template>
+</template>
 
 <script>
-import { mapGetters } from 'vuex'
-import list from "@/views/list"
+import { mapGetters } from "vuex";
+import list from "@/views/list";
 import customButton from "@/views/customButton";
 import customform from "@/views/customform";
 
-import radiobutton from "@/components/radiobutton"
-import system from "@/components/system"
+import radiobutton from "@/components/radiobutton";
+import system from "@/components/system";
 
 export default {
   components: {
@@ -27,7 +22,6 @@ export default {
     radiobutton,
     list,
     system
- 
   },
   data() {
     return {
@@ -46,16 +40,15 @@ export default {
       show: true,
       customvalue1: "",
       customvalue2: "",
-      comboInput:"",
-      radioInput:""
+      comboInput: "",
+      radioInput: ""
     };
-   
   },
   computed: {
     b: function() {
       return this.a + 10;
     },
-      ...mapGetters('custom',['getColors'])
+    ...mapGetters("custom", ["getColors"])
   },
   methods: {
     changeTitle: function(event) {
@@ -85,34 +78,26 @@ export default {
 
     onClickForm(event) {
       this.customvalue1 = event;
-      this.customvalue2=event;
+      this.customvalue2 = event;
 
       console.log(this.customvalue1);
       console.log(this.customvalue2);
     },
-    onComboClick(value){
-        
-        this.comboInput=value
-      
+    onComboClick(value) {
+      this.comboInput = value;
     },
-    onRadioButton(event){
-      
-      this.radioInput=event
+    onRadioButton(event) {
+      this.radioInput = event;
       console.log(this.radioInput);
-
-    },
+    }
   },
-  created() {
-    
-  },
+  created() {},
   watch: {
     firstname(params) {
       console.log(this);
     }
-  } 
+  }
 };
 </script>
 
-<style lang="stylus" scoped>
-
-</style>
+<style lang="stylus" scoped></style>

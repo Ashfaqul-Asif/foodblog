@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import { db, storage } from "../firebaseInit";
 export default {
   data: () => ({
@@ -53,7 +54,9 @@ export default {
         ) ||
         "Min. 8 characters with at least one capital letter, a number and a special character."
     ],
-    checkbox: false
+    checkbox: false,
+    isAdmin:false,
+    islogin:false
   }),
   methods: {
     login: function() {
@@ -61,19 +64,28 @@ export default {
         .where("password", "==", this.password).where("email","==",this.email)
         .get()
         .then(snapshot=>{
-            console.log(snapshot.empty);
+             console.log(snapshot);
+             snapshot.forEach(doc => {
+              this.isAdmin=doc.data().isAdmin
+              this.islogin=true
+              this.setState({isAdmin:this.isAdmin})
+              this.setState({isLogin:true})
+              console.log(this.isAdmin);
+              console.log(this.isLogin);
+             });
             if (snapshot.empty) {
                 console.log("wrong password or email");
             }
             else{
                 console.log("login Successfull");
-                this.$router.push( '/' );
+                  this.$router.push('/');
             }
         })
         .catch(function(error) {
           console.log("Error getting documents: ", error);
         });
-    }
+    },
+    ...mapMutations("product",["setState"])
   }
 };
 </script>
