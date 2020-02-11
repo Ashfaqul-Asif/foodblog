@@ -153,6 +153,10 @@ const getters = {
 const mutations = {
     setState: (state, payload) => {
         Object.keys(payload).forEach(key => (state[key] = payload[key]))
+    },
+    resetState:(state)=>{
+       state.isLogin=false,
+       state.isAdmin=false
     }
 }
 export default {

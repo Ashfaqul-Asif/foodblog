@@ -3,62 +3,75 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import AddFoodBlog from '../views/AddFoodBlog'
 import Newsblog from '../views/Newsblog'
-import Test from '../views/Test'
 import customButton from '../views/customButton'
 import customform from '@/views/customform'
 import Dashboard from '@/components/Dashboard'
 import signup from '@/authentication/signup'
 import login from '@/authentication/login'
+import navbar from '@/layout/navbar'
+import blogData from '@/components/blogData'
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
+const routes = [{
     path: '/',
-    name: 'home',
-    component: Home
+    component: navbar,
+    children: [{
+        path: '/',
+        component: Home
+      }
+
+    ]
+
   },
   {
     path: '/addfoodblog',
-    name: 'AddFoodBlog',
-    // route level code-splitting
-    // this generates a separate chunk (AddFoodBlog.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: AddFoodBlog
-  },
-  {
-    path:'/newsblog/:id',
-    name: '',
-    component:Newsblog,
-   
-  },
-  {
-    path:'/signup',
-    name: '',
-    component:signup,
-   
-  },
-  {
-    path:'/login',
-    name: '',
-    component:login,
+    component: AddFoodBlog,
 
   },
   {
-     path:'/custombutton',
-     component:customButton,
+    path: '/newsblog/:id',
+    name: '',
+    component: Newsblog,
+
+
+  },
+  {
+    path: '/signup',
+    name: '',
+    component: signup,
+
+  },
+  {
+    path: '/login',
+    name: '',
+    component: login,
+
+
+  },
+  {
+    path: '/custombutton',
+    component: customButton,
+
   },
   {
 
-    path:'/customform',
-    component:customform,
+    path: '/customform',
+    component: customform,
+
   },
   {
-    path:'/Dashboard',
-    component:Dashboard,
+    path: '/Dashboard',
+    component: Dashboard,
+
+  },
+  {
+    path: '/blogData',
+    component: blogData,
+
   }
- 
-  
+
+
 ]
 
 const router = new VueRouter({

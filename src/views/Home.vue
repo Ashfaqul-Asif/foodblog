@@ -1,7 +1,7 @@
 <template>
 <div class="home">
 <v-container>
-  <v-layout class="d-flex flex-wrap" >
+  <v-layout class="d-flex flex-wrap mt-4 pt-10 " >
   <FoodCard class="mx-2 my-2" v-for="blog in getBlogs" :key="blog.id" :blog="blog" />
   </v-layout>
   </v-container>
@@ -13,10 +13,11 @@
 import FoodCard from "@/components/FoodCard.vue";
 import db from '@/firebaseInit'
 import { mapGetters,mapActions } from "vuex";
+
 export default {
   name: "home",
   components: {
-    FoodCard
+    FoodCard,
   },
   data() {
     return {};

@@ -1,39 +1,13 @@
 <template>
   <v-app>
-    <v-app-bar app color="white">
-      <v-app-bar-nav-icon @click="drawer=!drawer"></v-app-bar-nav-icon>
-      <v-btn v-if="!getisLogin" @click="login()" class="btn blue--text">Login</v-btn>
-      <v-btn v-else @click="logout()">Logout</v-btn>
-      {{getisAdmin === undefined ?"true":"false"}}sdsad
-    </v-app-bar>
-
-    <v-content>
-      <router-view></router-view>
-    </v-content>
-    <v-navigation-drawer v-model="drawer" absolute temporary>
-      <v-divider></v-divider>
-
-      <v-list dense>
-        <v-list-item v-for="item in items" :key="item.title" link>
-          <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title v-on:click="onclickItem(item)">
-              {{
-              item.title
-              }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
+    <router-view></router-view>
   </v-app>
 </template>
 
 <script>
 import FoodCard from "./components/FoodCard";
-import { mapGetters } from "vuex";
+
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "App",
@@ -41,21 +15,27 @@ export default {
   components: {
     FoodCard
   },
-  data: () => ({
+  data() {
+    return {};
+  },
+  computed: {}
+  /*   data: () => ({
     drawer: null,
 
     items: [
       {
         title: "Admin Panel",
-        route: "/addfoodblog"
+        route: "/addfoodblog",
+        icon: "mdi-account-tie"
       },
       {
         title: "Login",
-        route: "/login"
+        route: "/login",
+        icon: "mdi-login"
       }
     ]
-  }),
-  methods: {
+  }), */
+  /*   methods: {
     onclickItem(item) {
       console.log(this.$router.history.current.path);
       if (this.$router.history.current.path !== item.route) {
@@ -67,21 +47,25 @@ export default {
       if (this.$router.history.current.path !== "/login") {
         this.$router.push("/login");
       }
+        console.log(this.$store.state);
+        console.log(this.$store);
     },
-    logout() {}
+    logout() {
+      console.log(event);
+      this.resetState()
+      this.$router.push('/')
+    
+    },
+    ...mapMutations("product",["resetState"])
   },
   computed: {
-    ...mapGetters("product", ["getisAdmin" , "getisLogin"])
+    ...mapGetters("product", ["getisAdmin", "getisLogin"])
   },
   created() {
     console.log(this.$store.getters["product/getisAdmin"]);
     console.log("app created => ", this.getisAdmin, this.getisLogin);
-  }
+  } */
 };
 </script>
 <style >
-.btn {
-  overflow: hidden;
-  left: 90%;
-}
 </style>

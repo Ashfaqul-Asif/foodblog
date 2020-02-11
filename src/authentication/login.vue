@@ -25,7 +25,7 @@
           ></v-checkbox>
 
           <v-btn :disabled="!valid" color="#42A5F5" class="mr-4 white--text" @click="login">Login</v-btn>
-          <v-btn @click="$router.push( '/signup' )" class="btn">Create Account</v-btn>
+          <v-btn @click="$router.push( '/signup' )" color="success" class="btn white--text ">Create Account</v-btn>
         </v-form>
       </v-card>
     </div>
@@ -97,6 +97,7 @@ export default {
 }
 .btn {
   left: 260px;
+  
 }
 </style> >
   

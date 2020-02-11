@@ -1,50 +1,70 @@
 <template>
-  <v-container>
-    <v-card class="overflow-hidden pb-10">
-      <v-row class="mx-4">
-        <v-img
-          @click="deleteImage(index)"
-          v-for="(src, index) in src"
-          :key="index"
-          class="mx-1 my-5"
-          height="35vh"
-          :src="src"
-        ></v-img>
-      </v-row>
-      <div class="ml-6" v-if="getisAdmin">
-        <input type="file" @change="uploadFiles" multiple />
-      </div>
-      <div class="mx-3">
-        <v-card-title v-if="!editTitlefield" @dblclick="editTitle">{{title}}</v-card-title>
-        <v-text-field v-else @dblclick="editTitlefield=false" v-model="title" label="edit title"></v-text-field>
-        <div class="my-2"></div>
-        <v-card-subtitle
-          v-if="!editSubtitlefield"
-          @dblclick="editSubtitle"
-          class="pt-1"
-        >{{subtitle}}</v-card-subtitle>
-        <v-text-field v-else @dblclick="editSubtitlefield=false" label="Edit subtitle" v-model="subtitle"></v-text-field>
-        <v-divider class="mx-4 my-4"></v-divider>
-        <v-card-text>
-          <div v-if="!editTextareafield" @dblclick="editTextarea">{{textarea}}</div>
+  <div>
+    <v-container>
+      <v-card class="overflow-hidden pb-10">
+        <v-row class="mx-4">
+          <v-img
+            @click="deleteImage(index)"
+            v-for="(src, index) in src"
+            :key="index"
+            class="mx-1 my-5"
+            height="35vh"
+            :src="src"
+          ></v-img>
+        </v-row>
+        <div class="ml-6" v-if="getisAdmin">
+          <input type="file" @change="uploadFiles" multiple />
+        </div>
+        <div class="mx-3">
+          <v-card-title v-if="!editTitlefield" @dblclick="editTitle">{{title}}</v-card-title>
+          <v-text-field v-else @dblclick="editTitlefield=false" v-model="title" label="edit title"></v-text-field>
+          <div class="my-2"></div>
+          <v-card-subtitle
+            v-if="!editSubtitlefield"
+            @dblclick="editSubtitle"
+            class="pt-1"
+          >{{subtitle}}</v-card-subtitle>
+          <v-text-field
+            v-else
+            @dblclick="editSubtitlefield=false"
+            label="Edit subtitle"
+            v-model="subtitle"
+          ></v-text-field>
+          <v-divider class="mx-4 my-4"></v-divider>
+          <v-card-text>
+            <div v-if="!editTextareafield" @dblclick="editTextarea">{{textarea}}</div>
 
-          <div v-else @dblclick="editTextareafield=false">
-            <v-textarea label="Edit textarea" v-model="textarea"></v-textarea>
-          </div>
-        </v-card-text>
-      </div>
-      <v-btn v-if="getisAdmin" class="fab" color="red " @click="deleteBlog" dark small absolute fab>
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </v-card>
-  </v-container>
+            <div v-else @dblclick="editTextareafield=false">
+              <v-textarea label="Edit textarea" v-model="textarea"></v-textarea>
+            </div>
+          </v-card-text>
+        </div>
+        <v-btn
+          v-if="getisAdmin"
+          class="fab"
+          color="red "
+          @click="deleteBlog"
+          dark
+          small
+          absolute
+          fab
+        >
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
+      </v-card>
+    </v-container>
+  </div>
 </template>
 
 <script>
 import { db, storage } from "@/firebaseInit";
 import { mapGetters, mapActions } from "vuex";
 import { functions } from "firebase";
+import navbar from "@/layout/navbar";
 export default {
+  components: {
+    navbar
+  },
   data() {
     return {
       title: "",
@@ -158,17 +178,17 @@ export default {
       }
     },
     editTitle(event) {
-      if (this.getisAdmin) {
+      if (!this.getisAdmin) {
         this.editTitlefield = true;
       }
     },
     editSubtitle(event) {
-      if (this.getisAdmin) {
+      if (!this.getisAdmin) {
         this.editSubtitlefield = true;
       }
     },
-     editTextarea(event) {
-      if (this.getisAdmin) {
+    editTextarea(event) {
+      if (!this.getisAdmin) {
         this.editTextareafield = true;
       }
     }
@@ -177,6 +197,7 @@ export default {
     ...mapGetters("product", ["getisAdmin"])
   },
   created() {
+    this.$emit(`update:layout`, navbar);
     console.log(this.$route.params.id);
     let that = this;
     db.collection("addBlogs")
