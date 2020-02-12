@@ -5,6 +5,7 @@
       <v-btn v-if="!getisLogin" @click="login()" class="btn blue--text">Login</v-btn>
       <v-btn v-else @click="logout()" class="btn blue--red" >Logout</v-btn>
       <!-- {{getisAdmin === undefined ?"true":"false"}}sdsad -->
+     
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" absolute temporary>
       <v-divider></v-divider>
@@ -74,7 +75,7 @@ export default {
   computed: {
     ...mapGetters("product", ["getisAdmin", "getisLogin"]),
     filterItems(){
-      if (!this.getisAdmin) {
+      if (this.getisAdmin) {
         return this.items.filter(item=>item.title !== 'Admin Panel')
       }else {
         return this.items

@@ -1,5 +1,6 @@
 <template>
  <v-container >
+
    <h2 class="light-blue--text" style=" text-align: center ">Admin panel</h2>
        <v-form
     ref="form"
@@ -17,7 +18,6 @@
       label="Sub-Title"
       required
     ></v-text-field>
-     
     <v-textarea
           v-model="textarea"
           label="Blog-text"
@@ -45,6 +45,7 @@
 
 <script>
 import { db,storage } from "../firebaseInit"
+import { mapGetters } from "vuex"
   export default {
     data: () => ({
       valid: true,
@@ -53,9 +54,13 @@ import { db,storage } from "../firebaseInit"
       image:[],
       select: null,
       textarea: '',
-      isAdmin:false
+      isAdmin:false,
+      isLoggedin:false
       
     }),
+    computed: {
+        ...mapGetters("product", ["getusername"]),
+    },
 
     methods: {
       previewFiles(event){
@@ -107,7 +112,7 @@ import { db,storage } from "../firebaseInit"
         title: this.title,
         subtitle: this.subtitle,
         textarea: this.textarea,
-        image:this.image
+        image:this.image, 
       })
       
      .then(function(docRef) {

@@ -4,7 +4,7 @@
       <v-card class="overflow-hidden pb-10">
         <v-row class="mx-4">
           <v-img
-            @click="deleteImage(index)"
+            @click  ="deleteImage(index)"
             v-for="(src, index) in src"
             :key="index"
             class="mx-1 my-5"
@@ -163,7 +163,7 @@ export default {
     },
 
     deleteImage(index) {
-      if (getisAdmin) {
+      if (!this.getisAdmin) {
         this.src.splice(index, 1);
         console.log(this.src);
         db.collection("addBlogs")
@@ -176,6 +176,7 @@ export default {
             });
           });
       }
+      else return 0
     },
     editTitle(event) {
       if (!this.getisAdmin) {
@@ -197,7 +198,7 @@ export default {
     ...mapGetters("product", ["getisAdmin"])
   },
   created() {
-    this.$emit(`update:layout`, navbar);
+
     console.log(this.$route.params.id);
     let that = this;
     db.collection("addBlogs")

@@ -1,19 +1,16 @@
 <template>
   <v-container>
-    <v-data-table :headers="headers" :items="desserts" sort-by="calories" class="elevation-1">
+    <v-data-table :headers="headers" :items="getBlogs" class="elevation-1">
       <template v-slot:top>
         <v-toolbar flat color="success">
-          <v-toolbar-title class="white--text" >BLOG  DETAILS </v-toolbar-title>
+          <v-toolbar-title class="white--text">BLOG DETAILS</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
-       
         </v-toolbar>
       </template>
-      <template v-slot:item.action="{ item }">
+      <template v-slot:item.action="{item}">
+         {{item.id}}
         <v-icon medium @click="deleteItem(item)">mdi-delete</v-icon>
-      </template>
-      <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize">Reset</v-btn>
       </template>
     </v-data-table>
   </v-container>
@@ -21,31 +18,24 @@
 
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 export default {
   data: () => ({
     dialog: false,
     headers: [
       {
-        text: "Dessert (100g serving)",
+        text: "Blog-Id",
         align: "left",
         sortable: false,
-        value: "name"
+        value: "id"
       },
       {
-        text: "Calories",
-        value: "calories"
+        text: "Title",
+        value: "title"
       },
       {
-        text: "Fat (g)",
-        value: "fat"
-      },
-      {
-        text: "Carbs (g)",
-        value: "carbs"
-      },
-      {
-        text: "Protein (g)",
-        value: "protein"
+        text: "Subtitle",
+        value: "subtitle"
       },
       {
         text: "Actions",
@@ -53,7 +43,7 @@ export default {
         sortable: false
       }
     ],
-    desserts: [],
+   /*  getBlogs: [], */
     editedIndex: -1,
     editedItem: {
       name: "",
@@ -72,6 +62,7 @@ export default {
   }),
 
   computed: {
+    ...mapGetters("product", ["getBlogs"]),
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     }
@@ -84,12 +75,33 @@ export default {
   },
 
   created() {
-    this.initialize();
+   
+    this.postBlogs()
+    
   },
-
   methods: {
-    initialize() {
-      this.desserts = [
+    ...mapActions("product",['postBlogs']),
+
+    deleteItem(item) {
+      const index = this.getBlogs.indexOf(item);
+      console.log(this.getBlogs.name);
+      confirm("Are you sure you want to delete this item?") &&
+        this.getBlogs.splice(index, 1);
+    },
+
+    close() {
+      this.dialog = false;
+      setTimeout(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      }, 300);
+    }
+  }
+};
+</script>
+
+ initialize() {
+      this.getBlogs = [
         {
           name: "Frozen Yogurt",
           calories: 159,
@@ -161,25 +173,4 @@ export default {
           protein: 7
         }
       ];
-    },
-
-    
-
-    deleteItem(item) {
-      const index = this.desserts.indexOf(item);
-      confirm("Are you sure you want to delete this item?") &&
-        this.desserts.splice(index, 1);
-    },
-
-    close() {
-      this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
-    },
-
- 
-  }
-};
-</script>
+    }, 

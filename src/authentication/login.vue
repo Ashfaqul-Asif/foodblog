@@ -56,7 +56,9 @@ export default {
     ],
     checkbox: false,
     isAdmin:false,
-    islogin:false
+    islogin:false,
+    username:''
+        
   }),
   methods: {
     login: function() {
@@ -67,11 +69,14 @@ export default {
              console.log(snapshot);
              snapshot.forEach(doc => {
               this.isAdmin=doc.data().isAdmin
+              this.username=doc.data().name
               this.islogin=true
               this.setState({isAdmin:this.isAdmin})
               this.setState({isLogin:true})
+              this.setState({username:this.username})
               console.log(this.isAdmin);
               console.log(this.isLogin);
+              console.log(this.username);
              });
             if (snapshot.empty) {
                 console.log("wrong password or email");

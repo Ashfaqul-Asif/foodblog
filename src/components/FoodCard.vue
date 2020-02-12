@@ -40,8 +40,7 @@
 
     methods: {
       onclickblog() {
-        //  let path = "/newsblog/"+this.blog.id
-        //  let path2 = `/newsblog/${Date.now()}/weaewe`
+     
         console.log(`/newsblog/${this.blog}`);
         this.$router.push({
           path: `/newsblog/${this.blog.id}`

@@ -66,7 +66,7 @@ const routes = [{
 
   },
   {
-    path: '/blogData',
+    path: '/blogdata',
     component: blogData,
 
   }

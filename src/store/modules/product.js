@@ -1,130 +1,9 @@
 import { db } from '@/firebaseInit'
 const state = {
-    /*  Blogs: [
-         {
-             id: 1,
-             src: 'https://images.unsplash.com/photo-1486286701208-1d58e9338013?ixlib=rb-1.2.1&dpr=1&auto=format&fit=crop&w=416&h=312&q=60',
-             title: 'lorem1',
-             subtitle: 'lorem Ipsum dolor sit1',
-             
-         },
-         {
-             id: 2,
-             src: 'https://images.unsplash.com/photo-1486286701208-1d58e9338013?ixlib=rb-1.2.1&dpr=1&auto=format&fit=crop&w=416&h=312&q=60 ',
-             title: 'lorem2',
-             subtitle: 'lorem Ipsum dolor sit2',
-             
-         },
-         {
-             id: 2,
-             src: 'https://images.unsplash.com/photo-1486286701208-1d58e9338013?ixlib=rb-1.2.1&dpr=1&auto=format&fit=crop&w=416&h=312&q=60',
-             title: 'lorem2',
-             subtitle: 'lorem Ipsum dolor sit2',
-            
-         },
-         {
-             id: 2,
-             src: 'https://images.unsplash.com/photo-1486286701208-1d58e9338013?ixlib=rb-1.2.1&dpr=1&auto=format&fit=crop&w=416&h=312&q=60',
-             title: 'lorem2',
-             subtitle: 'lorem Ipsum dolor sit2',
-             
-         },
-         {
-             id: 2,
-             src: 'https://images.unsplash.com/photo-1486286701208-1d58e9338013?ixlib=rb-1.2.1&dpr=1&auto=format&fit=crop&w=416&h=312&q=60',
-             title: 'lorem2',
-             subtitle: 'lorem Ipsum dolor sit2',
-             
-         },
-         {
-             id: 2,
-             src: 'https://images.unsplash.com/photo-1486286701208-1d58e9338013?ixlib=rb-1.2.1&dpr=1&auto=format&fit=crop&w=416&h=312&q=60',
-             title: 'lorem2',
-             subtitle: 'lorem Ipsum dolor sit2',
-             
-         },
-         {
-             id: 2,
-             src: 'https://images.unsplash.com/photo-1486286701208-1d58e9338013?ixlib=rb-1.2.1&dpr=1&auto=format&fit=crop&w=416&h=312&q=60',
-             title: 'lorem2',
-             subtitle: 'lorem Ipsum dolor sit2',
-             
-         },
-         {
-             id: 2,
-             src: 'https://images.unsplash.com/photo-1486286701208-1d58e9338013?ixlib=rb-1.2.1&dpr=1&auto=format&fit=crop&w=416&h=312&q=60',
-             title: 'lorem2',
-             subtitle: 'lorem Ipsum dolor sit2',
-             
-         },
-         {
-             id: 1,
-             src: 'https://images.unsplash.com/photo-1486286701208-1d58e9338013?ixlib=rb-1.2.1&dpr=1&auto=format&fit=crop&w=416&h=312&q=60',
-             title: 'lorem1',
-             subtitle: 'lorem Ipsum dolor sit1',
-            
-         },
-         {
-             id: 2,
-             src: 'https://images.unsplash.com/photo-1486286701208-1d58e9338013?ixlib=rb-1.2.1&dpr=1&auto=format&fit=crop&w=416&h=312&q=60',
-             title: 'lorem2',
-             subtitle: 'lorem Ipsum dolor sit2',
-            
-         },
-         {
-             id: 2,
-             src: 'https://images.unsplash.com/photo-1486286701208-1d58e9338013?ixlib=rb-1.2.1&dpr=1&auto=format&fit=crop&w=416&h=312&q=60',
-             title: 'lorem2',
-             subtitle: 'lorem Ipsum dolor sit2',
-             
-         },
-         {
-             id: 2,
-             src: 'https://images.unsplash.com/photo-1486286701208-1d58e9338013?ixlib=rb-1.2.1&dpr=1&auto=format&fit=crop&w=416&h=312&q=60',
-             title: 'lorem2',
-             subtitle: 'lorem Ipsum dolor sit2',
-           
-         },
-         {
-             id: 2,
-             src: 'https://images.unsplash.com/photo-1486286701208-1d58e9338013?ixlib=rb-1.2.1&dpr=1&auto=format&fit=crop&w=416&h=312&q=60',
-             title: 'lorem2',
-             subtitle: 'lorem Ipsum dolor sit2',
-          
-         },
-         {
-             id: 2,
-             src: 'https://images.unsplash.com/photo-1486286701208-1d58e9338013?ixlib=rb-1.2.1&dpr=1&auto=format&fit=crop&w=416&h=312&q=60',
-             title: 'lorem2',
-             subtitle: 'lorem Ipsum dolor sit2',
-           
-         },
-         {
-             id: 2,
-             src: 'https://images.unsplash.com/photo-1486286701208-1d58e9338013?ixlib=rb-1.2.1&dpr=1&auto=format&fit=crop&w=416&h=312&q=60',
-             title: 'lorem2',
-             subtitle: 'lorem Ipsum dolor sit2',
-          
-         },
-         {
-             id: 2,
-             src: 'https://images.unsplash.com/photo-1486286701208-1d58e9338013?ixlib=rb-1.2.1&dpr=1&auto=format&fit=crop&w=416&h=312&q=60',
-             title: 'lorem2',
-             subtitle: 'lorem Ipsum dolor sit2',
-           
-         },
-         {
-             id: 2,
-             src: 'https://images.unsplash.com/photo-1486286701208-1d58e9338013?ixlib=rb-1.2.1&dpr=1&auto=format&fit=crop&w=416&h=312&q=60',
-             title: 'lorem2',
-             subtitle: 'lorem Ipsum dolor sit2',
-          
-         }
- 
-     ] */
     Blogs: [],
     isAdmin: false,
-    isLogin: false
+    isLogin: false,
+    username:''
 
 }
 const actions = {
@@ -148,7 +27,8 @@ const actions = {
 const getters = {
     getBlogs: state => state.Blogs,
     getisAdmin: state => state.isAdmin,
-    getisLogin: state => state.isLogin
+    getisLogin: state => state.isLogin,
+    getusername:state=>state.username
 }
 const mutations = {
     setState: (state, payload) => {
