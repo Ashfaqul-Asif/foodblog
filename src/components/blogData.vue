@@ -9,7 +9,6 @@
         </v-toolbar>
       </template>
       <template v-slot:item.action="{item}">
-         {{item.id}}
         <v-icon medium @click="deleteItem(item)">mdi-delete</v-icon>
       </template>
     </v-data-table>
@@ -18,6 +17,7 @@
 
 
 <script>
+import { db,storage } from "../firebaseInit"
 import { mapGetters, mapActions } from "vuex";
 export default {
   data: () => ({
@@ -43,7 +43,7 @@ export default {
         sortable: false
       }
     ],
-   /*  getBlogs: [], */
+    /*  getBlogs: [], */
     editedIndex: -1,
     editedItem: {
       name: "",
@@ -75,18 +75,26 @@ export default {
   },
 
   created() {
-   
-    this.postBlogs()
-    
+    this.postBlogs();
   },
   methods: {
-    ...mapActions("product",['postBlogs']),
+    ...mapActions("product", ["postBlogs"]),
 
     deleteItem(item) {
-      const index = this.getBlogs.indexOf(item);
-      console.log(this.getBlogs.name);
+      /* const index = this.getBlogs.indexOf(item); */
+      console.log(item.id);
       confirm("Are you sure you want to delete this item?") &&
-        this.getBlogs.splice(index, 1);
+        
+      db.collection("addBlogs")
+        .doc(item.id)
+        .delete()
+        .then(function() {
+          console.log("Document successfully deleted!");
+         
+        })
+        .catch(function(error) {
+          console.error("Error removing document: ", error);
+        });
     },
 
     close() {
@@ -100,77 +108,5 @@ export default {
 };
 </script>
 
- initialize() {
-      this.getBlogs = [
-        {
-          name: "Frozen Yogurt",
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0
-        },
-        {
-          name: "Ice cream sandwich",
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3
-        },
-        {
-          name: "Eclair",
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0
-        },
-        {
-          name: "Cupcake",
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3
-        },
-        {
-          name: "Gingerbread",
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9
-        },
-        {
-          name: "Jelly bean",
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0
-        },
-        {
-          name: "Lollipop",
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0
-        },
-        {
-          name: "Honeycomb",
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5
-        },
-        {
-          name: "Donut",
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9
-        },
-        {
-          name: "KitKat",
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7
-        }
-      ];
-    }, 
+ 
+     
