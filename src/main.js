@@ -6,6 +6,7 @@ import vuetify from './plugins/vuetify'
 import navbar from '@/layout/navbar'
 
 
+
 //import persistentState from 'vue-persistent-state'
 Vue.component('navbar-layout', navbar);
 
@@ -15,6 +16,7 @@ new Vue({
   router,
   store,
   vuetify,
+
  
   render: h => h(App)
 }).$mount('#app')

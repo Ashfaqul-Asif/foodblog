@@ -1,43 +1,49 @@
 <template>
-<div class="home">
-<v-container>
-  <v-layout class="d-flex flex-wrap mt-4 pt-10 " >
-  <FoodCard class="mx-2 my-2" v-for="blog in getBlogs" :key="blog.id" :blog="blog" />
-  </v-layout>
-  </v-container>
-</div>
+  <div class="home">
+    <v-container>
+      <v-layout class="d-flex flex-wrap mt-4 pt-10">
+        <FoodCard class="mx-2 my-2" v-for="blog in approvedBlogs" :key="blog.id" :blog="blog" />
+      </v-layout>
+    </v-container>
+  </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import FoodCard from "@/components/FoodCard.vue";
-import db from '@/firebaseInit'
-import { mapGetters,mapActions } from "vuex";
+import db from "@/firebaseInit";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "home",
   components: {
-    FoodCard,
+    FoodCard
   },
   data() {
     return {};
   },
   methods: {
-     ...mapActions("product",['postBlogs']) 
+    ...mapActions("product", ["postBlogs"])
   },
-  computed: { ...mapGetters("product", ["getBlogs"]) },
+  computed: {
+    ...mapGetters("product", ["getBlogs"]),
+    approvedBlogs() {
+      console.log(this.getBlogs);
+      let x = this.getBlogs.filter(blog => blog.isApproved);
+      console.log(x);
+      return x;
+    }
+  },
   created() {
-    
     console.log(this.getBlogs);
-  
-    this.postBlogs()
 
-  },
+    // this.postBlogs();
+  }
 };
 </script>
 
 <style  scoped>
-.home{
-  background-color: #F4F5F7
+.home {
+  background-color: #f4f5f7;
 }
 </style>

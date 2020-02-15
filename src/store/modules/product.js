@@ -10,8 +10,8 @@ const actions = {
 
    postBlogs:async ({ commit }) => {
         let Blogs = []
-        db.collection("addBlogs").get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
+        return await db.collection("addBlogs").get().then((querySnapshot) => {
+            querySnapshot.forEach(async (doc) => {
                 console.log(doc);
                 console.log(`${doc.id} => ${doc.data().userid}`);
                 db.collection("registration").doc(doc.data().userid).get().then((documentSnapshot)=>{
@@ -20,6 +20,9 @@ const actions = {
                   console.log(blog.name);
                   Blogs.push(blog)
                   console.log(Blogs);
+                  if(lastindex){
+                      return
+                  }
                 })
             });
         });

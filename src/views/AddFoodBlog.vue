@@ -55,7 +55,9 @@ import { mapGetters } from "vuex"
       select: null,
       textarea: '',
       isAdmin:false,
-      isLoggedin:false
+      isLoggedin:false,
+      isApproved:false
+      
       
     }),
     computed: {
@@ -114,7 +116,7 @@ import { mapGetters } from "vuex"
         textarea: this.textarea,
         image:this.image,
         userid:this.getuserId,
-        isApproved:false
+        isApproved:this.isApproved
       })
       
      .then(function(docRef) {

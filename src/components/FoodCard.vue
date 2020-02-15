@@ -1,5 +1,6 @@
 <template>
   <v-card width="350px">
+    
     <v-img @click="deleteImage" class="white--text align-end" height="40vh" :src="blog.image[0]">
       <v-card-title>
         <!--     <div>
