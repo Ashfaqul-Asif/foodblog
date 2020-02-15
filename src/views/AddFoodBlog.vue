@@ -59,7 +59,7 @@ import { mapGetters } from "vuex"
       
     }),
     computed: {
-        ...mapGetters("product", ["getusername"]),
+        ...mapGetters("product", ["getuserId"]),
     },
 
     methods: {
@@ -112,7 +112,9 @@ import { mapGetters } from "vuex"
         title: this.title,
         subtitle: this.subtitle,
         textarea: this.textarea,
-        image:this.image, 
+        image:this.image,
+        userid:this.getuserId,
+        isApproved:false
       })
       
      .then(function(docRef) {

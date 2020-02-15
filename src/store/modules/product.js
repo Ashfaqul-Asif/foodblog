@@ -1,23 +1,26 @@
 import { db } from '@/firebaseInit'
 const state = {
     Blogs: [],
-    isAdmin: false,
-    isLogin: false,
-    username:''
+    isAdmin: null,
+    isLogin: null,
+    userid:''
 
 }
 const actions = {
 
-    postBlogs: ({ commit }) => {
+   postBlogs:async ({ commit }) => {
         let Blogs = []
         db.collection("addBlogs").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 console.log(doc);
-                console.log(`${doc.id} => ${doc.data()}`);
-                let blog = { ...doc.data(), id: doc.id }
-                console.log(blog);
-                Blogs.push(blog)
-                console.log(Blogs);
+                console.log(`${doc.id} => ${doc.data().userid}`);
+                db.collection("registration").doc(doc.data().userid).get().then((documentSnapshot)=>{
+                  console.log(documentSnapshot.data().name);
+                  let blog = { ...doc.data(), id: doc.id ,name:documentSnapshot.data().name}
+                  console.log(blog.name);
+                  Blogs.push(blog)
+                  console.log(Blogs);
+                })
             });
         });
         commit("setState", { Blogs })
@@ -28,7 +31,7 @@ const getters = {
     getBlogs: state => state.Blogs,
     getisAdmin: state => state.isAdmin,
     getisLogin: state => state.isLogin,
-    getusername:state=>state.username
+    getuserId:state=>state.userid
 }
 const mutations = {
     setState: (state, payload) => {
@@ -36,7 +39,9 @@ const mutations = {
     },
     resetState:(state)=>{
        state.isLogin=false,
-       state.isAdmin=false
+       state.isAdmin=false,
+       state.username=null,
+       state.userid=null
     }
 }
 export default {

@@ -48,7 +48,7 @@ export default {
       }
     ]
   }),
-  
+
   methods: {
     onclickItem(item) {
       console.log(this.$router.history.current.path);
@@ -75,9 +75,11 @@ export default {
   computed: {
     ...mapGetters("product", ["getisAdmin", "getisLogin"]),
     filterItems(){
-      if (this.getisAdmin) {
+      console.log(this.getisLogin && !this.getisAdmin);
+      if (this.getisLogin ===this.getisAdmin ) {
         return this.items.filter(item=>item.title !== 'Admin Panel')
-      }else {
+      }
+      else {
         return this.items
       }
     }

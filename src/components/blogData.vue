@@ -8,7 +8,35 @@
           <v-spacer></v-spacer>
         </v-toolbar>
       </template>
+      <template v-slot:item.image="{item}">
+        <v-layout class="d-flex flex-wrap">
+          <v-img
+            @click="(dialog = true,selectedImage=item.image[index])"
+            height="20px"
+            width="30px"
+            v-for="(image, index) in item.image"
+            :key="index"
+            class="mx-1"
+            :src="item.image[index]"
+          ></v-img>
+          <v-dialog v-model="dialog" max-width="290">
+            <v-card>
+               <v-img :src="selectedImage" >
+
+               </v-img>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" text @click="dialog = false">Back</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-layout>
+        <!-- <img  height="20px" width="30" :src="item.image" > -->
+      </template>
       <template v-slot:item.action="{item}">
+        <v-icon medidum class="mr-2" @click="editItem(item)">mdi-check-circle</v-icon>
+
         <v-icon medium @click="deleteItem(item)">mdi-delete</v-icon>
       </template>
     </v-data-table>
@@ -17,11 +45,12 @@
 
 
 <script>
-import { db,storage } from "../firebaseInit"
+import { db, storage } from "../firebaseInit";
 import { mapGetters, mapActions } from "vuex";
 export default {
   data: () => ({
     dialog: false,
+    selectedImage:'',
     headers: [
       {
         text: "Blog-Id",
@@ -30,12 +59,20 @@ export default {
         value: "id"
       },
       {
+        text: "Blogger Name",
+        value: "name"
+      },
+      {
         text: "Title",
         value: "title"
       },
       {
         text: "Subtitle",
         value: "subtitle"
+      },
+      {
+        text: "Blog Image",
+        value: "image"
       },
       {
         text: "Actions",
@@ -76,27 +113,29 @@ export default {
 
   created() {
     this.postBlogs();
+    console.log(this.postBlogs);
   },
   methods: {
     ...mapActions("product", ["postBlogs"]),
+    editItem(item) {
+      console.log(event);
+    },
 
     deleteItem(item) {
       /* const index = this.getBlogs.indexOf(item); */
       console.log(item.id);
       confirm("Are you sure you want to delete this item?") &&
-        
-      db.collection("addBlogs")
-        .doc(item.id)
-        .delete()
-        .then(function() {
-          console.log("Document successfully deleted!");
-         
-        })
-        .catch(function(error) {
-          console.error("Error removing document: ", error);
-        });
+        db
+          .collection("addBlogs")
+          .doc(item.id)
+          .delete()
+          .then(function() {
+            console.log("Document successfully deleted!");
+          })
+          .catch(function(error) {
+            console.error("Error removing document: ", error);
+          });
     },
-
     close() {
       this.dialog = false;
       setTimeout(() => {

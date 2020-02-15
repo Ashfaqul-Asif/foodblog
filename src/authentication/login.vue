@@ -1,7 +1,7 @@
 <template>
-  <v-container>
+  <v-container class="overflow-hidden">
     <div class="justify-center d-flex my-9">
-      <v-card outlined width="80vh" height="100%" class="px-6 py-4">
+      <v-card outlined width="80vh" height="100%" class="px-6 py-4 overflow-hidden ">
         <v-card-title class="title text justify-center mx-auto my-auto">Login</v-card-title>
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
@@ -25,7 +25,7 @@
           ></v-checkbox>
 
           <v-btn :disabled="!valid" color="#42A5F5" class="mr-4 white--text" @click="login">Login</v-btn>
-          <v-btn @click="$router.push( '/signup' )" color="success" class="btn white--text ">Create Account</v-btn>
+          <v-btn @click="$router.push( '/signup' )" color="success" class=" float-right white--text ">Create Account</v-btn>
         </v-form>
       </v-card>
     </div>
@@ -56,9 +56,7 @@ export default {
     ],
     checkbox: false,
     isAdmin:false,
-    islogin:false,
-    username:''
-        
+    islogin:false,    
   }),
   methods: {
     login: function() {
@@ -68,15 +66,16 @@ export default {
         .then(snapshot=>{
              console.log(snapshot);
              snapshot.forEach(doc => {
+              this.userid=doc.id
               this.isAdmin=doc.data().isAdmin
               this.username=doc.data().name
               this.islogin=true
               this.setState({isAdmin:this.isAdmin})
               this.setState({isLogin:true})
-              this.setState({username:this.username})
+              this.setState({userid:doc.id})
               console.log(this.isAdmin);
               console.log(this.isLogin);
-              console.log(this.username);
+              console.log(this.userid);
              });
             if (snapshot.empty) {
                 console.log("wrong password or email");
@@ -100,9 +99,6 @@ export default {
 
   color: white;
 }
-.btn {
-  left: 260px;
-  
-}
+
 </style> >
   
