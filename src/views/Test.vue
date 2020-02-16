@@ -55,6 +55,7 @@ export default {
       this.title = event.target.value;
       console.log(event);
     },
+      
     sayhello: function() {
       return "hello";
     },
@@ -91,7 +92,11 @@ export default {
       console.log(this.radioInput);
     }
   },
-  created() {},
+  created() {
+    
+   
+
+  },
   watch: {
     firstname(params) {
       console.log(this);

@@ -2,7 +2,7 @@
   <div class="home">
     <v-container>
       <v-layout class="d-flex flex-wrap mt-4 pt-10">
-        <FoodCard class="mx-2 my-2" v-for="blog in approvedBlogs" :key="blog.id" :blog="blog" />
+        <FoodCard class="mx-2 my-2" v-for="blog in getBlogs" :key="blog.id" :blog="blog" />
       </v-layout>
     </v-container>
   </div>
@@ -27,17 +27,17 @@ export default {
   },
   computed: {
     ...mapGetters("product", ["getBlogs"]),
-    approvedBlogs() {
+   /*  approvedBlogs() {
       console.log(this.getBlogs);
       let x = this.getBlogs.filter(blog => blog.isApproved);
       console.log(x);
       return x;
-    }
+    } */
   },
   created() {
     console.log(this.getBlogs);
 
-    // this.postBlogs();
+     this.postBlogs().then;
   }
 };
 </script>

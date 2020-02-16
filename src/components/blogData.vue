@@ -1,7 +1,7 @@
 <template>
   <v-container>
      
-    <v-data-table :loading="true" :headers="headers" :items="pendingBlog"   class="elevation-1">
+    <v-data-table :loading="loading" :headers="headers" :items="pendingBlog"   class="elevation-1">
       <template v-slot:top>
         <v-toolbar flat color="success">
           <v-toolbar-title class="white--text">BLOG DETAILS</v-toolbar-title>
@@ -10,11 +10,11 @@
           <v-spacer></v-spacer>
         </v-toolbar>
       </template>
-      <template v-slot:loading>
-        khgt7gf78fg78ft85tg678hj87u
+   <!--    <template v-slot:loading>
+      
            <pulse-loader :loading="loading" :color="color" :size="size"></pulse-loader>
         
-      </template>
+      </template> -->
       
       <template v-slot:item.textarea="{item}">
         <p @click="openTextAreaDialog(item.id)" > {{item.textarea.substring(0,16)}}...</p>
@@ -94,16 +94,15 @@ import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
     PulseLoader
   },
     data: () => ({
+      loading:true,
       dialog: false,
       dialogtextarea: false,
       selectedImage: "",
       selectedcontent: "",
       selectedTextArea:"",
-      loading:true,
+
       color: '#fff',
       size: '10px',
-    
-
       headers: [{
           text: "Blog-Id",
           align: "left",
@@ -155,7 +154,7 @@ import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
     }),
    
     computed: {
-      ...mapGetters("product", ["getBlogs"]),
+      ...mapGetters("product", ["getBlogs","getLoading"]),
       pendingBlog() {
         return this.getBlogs.filter(blog => !blog.isApproved);
       },
@@ -168,17 +167,20 @@ import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
     watch: {
       dialog(val) {
         val || this.close();
-      },
+      }/* ,
        pendingBlog(x){
          if (x.length >0) {
            this.loading=false
          }
-      }
+      } */
     },
 
     created() {
-      // this.postBlogs();
-      console.log(this.postBlogs);
+      let that =this
+      this.postBlogs().then(function(res){
+      that.loading=false
+      console.log('ssdsad', res);
+      })
     },
     methods: {
       ...mapActions("product", ["postBlogs"]),
