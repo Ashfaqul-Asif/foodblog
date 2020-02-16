@@ -40,11 +40,16 @@ const actions = {
         let Blogs=[]
         let count =0
         let querySnapshot=await db.collection("addBlogs").get()
-         querySnapshot.forEach((doc)=>{
-            let documentSnapshot= db.collection("registration").doc(doc.data().userid).get()
-              
+         querySnapshot.forEach(async(doc)=>{
+            let documentSnapshot= await db.collection("registration").doc(doc.data().userid).get()
+            let blog={...doc.data(),id:doc.id,name:documentSnapshot.data().name}
+            Blogs.push(blog)
+            count++
+            if (querySnapshot.size === count) {
+                return 
+            }
         })
-        
+        commit("setState", { Blogs })   
     }
 }
 
