@@ -1,7 +1,7 @@
 <template>
   <v-container>
      
-    <v-data-table :loading="loading" :headers="headers" :items="pendingBlog"   class="elevation-1">
+    <v-data-table :loading="loading"  :headers="headers" :items="getBlogs"   class="elevation-1">
       <template v-slot:top>
         <v-toolbar flat color="success">
           <v-toolbar-title class="white--text">BLOG DETAILS</v-toolbar-title>
@@ -20,15 +20,17 @@
         <p @click="openTextAreaDialog(item.id)" > {{item.textarea.substring(0,16)}}...</p>
            <v-dialog v-model="dialogtextarea"  max-width="340">
           <v-card>
-            {{item}}
-             <v-card-text  >{{item.textarea}} </v-card-text>
+        <v-card-text  >{{item.textarea}} </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-
               <v-btn color="green darken-1" text @click="dialogtextarea = false">Back</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog> 
+      </template>
+      <template v-slot:item.isApproved="{item}">
+      <v-icon v-if="item.isApproved">mdi-check</v-icon>
+      <v-icon v-else >mdi-close</v-icon>
       </template>
       <template v-slot:item.image="{item}">
         <v-layout class="d-flex flex-wrap">
@@ -48,8 +50,10 @@
         <!-- <img  height="20px" width="30" :src="item.image" > -->
       </template>
       <template v-slot:item.action="{item}">
-        <v-icon medidum class="mr-2" @click="approveBlog(item)">mdi-check-circle</v-icon>
+   
+        <v-icon  v-if="!item.isApproved" medidum class="mr-2" @click="approveBlog(item)">mdi-check-circle</v-icon>
         <v-icon medium @click="deleteItem(item)">mdi-delete</v-icon>
+        {{pendingBlog}}
       </template>
     </v-data-table>
         <!-- <v-dialog v-model="dialogtextarea"  max-width="340">
@@ -130,10 +134,16 @@ import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
           value: "image"
         },
         {
+          text:"Blog-Status",
+          value:"isApproved"
+
+        },
+        
+        {
           text: "Actions",
           value: "action",
           sortable: false
-        }
+        },
       ],
 
       editedIndex: -1,
@@ -156,7 +166,15 @@ import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
     computed: {
       ...mapGetters("product", ["getBlogs","getLoading"]),
       pendingBlog() {
-        return this.getBlogs.filter(blog => !blog.isApproved);
+        let totalBlogs=this.getBlogs.reduce((acc,cur)=>{
+          if (cur.isApproved) {
+            console.log(acc);
+            return acc+=1
+          }
+          return acc
+
+        },0)
+       return totalBlogs
       },
       formTitle() {
         return this.editedIndex === -1 ? "New Item" : "Edit Item";
@@ -176,10 +194,10 @@ import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
     },
 
     created() {
-      let that =this
-      this.postBlogs().then(function(res){
-      that.loading=false
-      console.log('ssdsad', res);
+      // let that =this
+      this.postBlogs().then((res)=>{
+        this.loading=false
+    
       })
     },
     methods: {

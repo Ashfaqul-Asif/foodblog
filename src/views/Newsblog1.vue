@@ -12,7 +12,7 @@
             :src="src"
           ></v-img>
         </v-row>
-        <div class="ml-6" v-if="!getisAdmin && getisLogin">
+        <div class="ml-6" v-if="getisAdmin">
           <input type="file" @change="uploadFiles" multiple />
         </div>
         <div class="mx-3">
@@ -179,23 +179,23 @@ export default {
       else return 0
     },
     editTitle(event) {
-      if (!this.getisAdmin && this.getisLogin) {
+      if (!this.getisAdmin) {
         this.editTitlefield = true;
       }
     },
     editSubtitle(event) {
-      if (!this.getisAdmin && this.getisLogin ) {
+      if (!this.getisAdmin) {
         this.editSubtitlefield = true;
       }
     },
     editTextarea(event) {
-      if (!this.getisAdmin && this.getisLogin ) {
+      if (!this.getisAdmin) {
         this.editTextareafield = true;
       }
     }
   },
   computed: {
-    ...mapGetters("product", ["getisAdmin","getisLogin"])
+    ...mapGetters("product", ["getisAdmin"])
   },
   created() {
 

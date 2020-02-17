@@ -8,48 +8,51 @@ const state = {
 
 }
 const actions = {
-   /*  postBlogs:  ({ commit }) => {
-        return new Promise((res) => {
-            commit("setLoading", true)
-            let Blogs = []
-            let count = 0
-            db.collection("addBlogs").get().then((querySnapshot) => {
-                console.log(querySnapshot);
-                querySnapshot.forEach((doc) => {
-                    console.log(doc);
-                    console.log(`${doc.id} => ${doc.data().userid}`);
-                    db.collection("registration").doc(doc.data().userid).get().then((documentSnapshot) => {
-                        console.log(documentSnapshot.data().name);
-                        let blog = { ...doc.data(), id: doc.id, name: documentSnapshot.data().name }
-                        console.log(blog);
-                        Blogs.push(blog)
-                        count += 1
-                        console.log(Blogs.length);
-                        console.log(count);
-                        if (querySnapshot.size === count) {
-                           res()
-                        }
-                    })
-                });
-            });
-            commit("setState", { Blogs })
-        })
-    } */
-    postBlogs:async ({commit})=>{
+    /*  postBlogs:  ({ commit }) => {
+         return new Promise((res) => {
+             commit("setLoading", true)
+             let Blogs = []
+             let count = 0
+             db.collection("addBlogs").get().then((querySnapshot) => {
+                 console.log(querySnapshot);
+                 querySnapshot.forEach((doc) => {
+                     console.log(doc);
+                     console.log(`${doc.id} => ${doc.data().userid}`);
+                     db.collection("registration").doc(doc.data().userid).get().then((documentSnapshot) => {
+                         console.log(documentSnapshot.data().name);
+                         let blog = { ...doc.data(), id: doc.id, name: documentSnapshot.data().name }
+                         console.log(blog);
+                         Blogs.push(blog)
+                         count += 1
+                         console.log(Blogs.length);
+                         console.log(count);
+                         if (querySnapshot.size === count) {
+                            res()
+                         }
+                     })
+                 });
+             });
+             commit("setState", { Blogs })
+         })
+     } */
+    postBlogs: async ({ commit }) => {
         commit("setLoading", true)
-        let Blogs=[]
-        let count =0
-        let querySnapshot=await db.collection("addBlogs").get()
-         querySnapshot.forEach(async(doc)=>{
-            let documentSnapshot= await db.collection("registration").doc(doc.data().userid).get()
-            let blog={...doc.data(),id:doc.id,name:documentSnapshot.data().name}
+        console.log('starting');
+        let Blogs = []
+        let count = 0
+        let querySnapshot = await db.collection("addBlogs").get()
+        querySnapshot.forEach(async (doc) => {
+            let documentSnapshot = await db.collection("registration").doc(doc.data().userid).get()
+            let blog = { ...doc.data(), id: doc.id, name: documentSnapshot.data().name }
             Blogs.push(blog)
             count++
             if (querySnapshot.size === count) {
-                return 
+                return
             }
+            console.log('Ending');
         })
-        commit("setState", { Blogs })   
+        console.log("postBlogs", Blogs);
+        commit("setState", { Blogs })
     }
 }
 
@@ -98,20 +101,20 @@ function x(a, b) {
     })
     return y
 }
-                        /*    try {
-       let querySnapshot = await db.collection("addBlogs").get()
-       for (let doc of querySnapshot) {
-           let documentSnapshot = await db.collection("registration").doc(doc.data()).userid.get()
-           let blog = { ...doc.data(), id: doc.id, name: documentSnapshot.data().name }
-           console.log(blog);
-       }
-   } catch (error) {
-      console.log(error);
-   } */
+/*    try {
+let querySnapshot = await db.collection("addBlogs").get()
+for (let doc of querySnapshot) {
+let documentSnapshot = await db.collection("registration").doc(doc.data()).userid.get()
+let blog = { ...doc.data(), id: doc.id, name: documentSnapshot.data().name }
+console.log(blog);
+}
+} catch (error) {
+console.log(error);
+} */
 
-   function makerequest(location){
-       return new Promise(function(resolve,reject){
+function makerequest(location) {
+    return new Promise(function (resolve, reject) {
         console.log('making request to `{$location`}');
-       })
+    })
 
-   }
+}

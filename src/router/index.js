@@ -14,62 +14,62 @@ import blogData from '@/components/blogData'
 Vue.use(VueRouter)
 
 const routes = [{
+  path: '/',
+  component: navbar,
+  children: [{
     path: '/',
-    component: navbar,
-    children: [{
-        path: '/',
-        component: Home
-      }
-
-    ]
-
-  },
-  {
-    path: '/addfoodblog',
-    component: AddFoodBlog,
-
-  },
-  {
-    path: '/newsblog/:id',
-    name: '',
-    component: Newsblog,
-
-
-  },
-  {
-    path: '/signup',
-    name: '',
-    component: signup,
-
-  },
-  {
-    path: '/login',
-    name: '',
-    component: login,
-
-
-  },
-  {
-    path: '/custombutton',
-    component: customButton,
-
-  },
-  {
-
-    path: '/customform',
-    component: customform,
-
-  },
-  {
-    path: '/Dashboard',
-    component: Dashboard,
-
-  },
-  {
-    path: '/blogdata',
-    component: blogData,
-
+    component: Home
   }
+
+  ]
+
+},
+{
+  path: '/addfoodblog',
+  component: AddFoodBlog,
+
+},
+{
+  path: '/newsblog/:id',
+  name: '',
+  component: Newsblog,
+
+
+},
+{
+  path: '/signup',
+  name: '',
+  component: signup,
+
+},
+{
+  path: '/login',
+  name: '',
+  component: login,
+
+
+},
+{
+  path: '/custombutton',
+  component: customButton,
+
+},
+{
+
+  path: '/customform',
+  component: customform,
+
+},
+{
+  path: '/dashboard',
+  component: Dashboard,
+
+},
+{
+  path: '/blogdata',
+  component: blogData,
+
+}
 
 
 ]

@@ -45,6 +45,12 @@ export default {
         title: "Login",
         route: "/login",
         icon: "mdi-login"
+      },
+      {
+        title:"Dashboard",
+        route:"/dashboard",
+        icon:"mdi-login"
+
       }
     ]
   }),
