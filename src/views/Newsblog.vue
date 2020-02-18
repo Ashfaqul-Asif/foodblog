@@ -114,7 +114,7 @@ export default {
           .delete()
           .then(() => {
             console.log("Document successfully deleted!");
-            this.$router.go(-1);
+            location.reload();
             console.log(this.$router);
           })
           .catch(function(error) {

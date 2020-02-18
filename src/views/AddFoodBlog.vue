@@ -116,12 +116,15 @@ import { mapGetters } from "vuex"
         textarea: this.textarea,
         image:this.image,
         userid:this.getuserId,
-        isApproved:this.isApproved
+        isApproved:this.isApproved,
+        postedtime:Date.now()
       })
       
      .then(function(docRef) {
        that.reset()
+     
     console.log("Document written with ID: ", docRef.id);
+       location.reload();
     })
      .catch(function(error) {
     console.error("Error adding document: ", error);

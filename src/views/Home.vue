@@ -1,9 +1,8 @@
 <template>
   <div class="home">
     <v-container>
-      <v-layout class="d-flex flex-wrap mt-4 pt-10">
-       
-        <FoodCard class="mx-2 my-2" v-for="blog in getBlogs" :key="blog.id" :blog="blog" />
+      <v-layout class="d-flex flex-wrap ">
+        <FoodCard class="mx-2 my-1" v-for="blog in approvedBlogs" :key="blog.id" :blog="blog" />
       </v-layout>
     </v-container>
   </div>
@@ -27,13 +26,13 @@ export default {
     ...mapActions("product", ["postBlogs"])
   },
   computed: {
-    ...mapGetters("product", ["getBlogs"])
-    /*  approvedBlogs() {
+    ...mapGetters("product", ["getBlogs"]),
+     approvedBlogs() {
       console.log(this.getBlogs);
       let x = this.getBlogs.filter(blog => blog.isApproved);
       console.log(x);
       return x;
-    } */
+    } 
   },
   created() {
     //console.log(this.getBlogs);

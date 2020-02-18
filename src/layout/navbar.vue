@@ -1,12 +1,12 @@
 <template>
-<div>
-   <v-app-bar app color="white">
+  <div>
+    <v-toolbar>
       <v-app-bar-nav-icon @click="drawer=!drawer"></v-app-bar-nav-icon>
+
       <v-btn v-if="!getisLogin" @click="login()" class="btn blue--text">Login</v-btn>
-      <v-btn v-else @click="logout()" class="btn blue--red" >Logout</v-btn>
-      <!-- {{getisAdmin === undefined ?"true":"false"}}sdsad -->
-     
-    </v-app-bar>
+      <v-btn v-else @click="logout()" class="btn blue--red">Logout</v-btn>
+    </v-toolbar>
+
     <v-navigation-drawer v-model="drawer" absolute temporary>
       <v-divider></v-divider>
 
@@ -26,14 +26,13 @@
       </v-list>
     </v-navigation-drawer>
     <router-view></router-view>
-</div>
-    
+  </div>
 </template>
 
 <script>
-import { mapGetters,mapMutations } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 export default {
-    data: () => ({
+  data: () => ({
     drawer: null,
     items: [
       {
@@ -47,10 +46,9 @@ export default {
         icon: "mdi-login"
       },
       {
-        title:"Dashboard",
-        route:"/dashboard",
-        icon:"mdi-login"
-
+        title: "Dashboard",
+        route: "/dashboard",
+        icon: "mdi-login"
       }
     ]
   }),
@@ -67,26 +65,24 @@ export default {
       if (this.$router.history.current.path !== "/login") {
         this.$router.push("/login");
       }
-        console.log(this.$store.state);
-        console.log(this.$store);
+      console.log(this.$store.state);
+      console.log(this.$store);
     },
     logout() {
       console.log(event);
-      this.resetState()
-      this.$router.push('/')
-    
+      this.resetState();
+      this.$router.push("/");
     },
-    ...mapMutations("product",["resetState"])
+    ...mapMutations("product", ["resetState"])
   },
   computed: {
     ...mapGetters("product", ["getisAdmin", "getisLogin"]),
-    filterItems(){
+    filterItems() {
       console.log(this.getisLogin && !this.getisAdmin);
-      if (this.getisLogin ===this.getisAdmin ) {
-        return this.items.filter(item=>item.title !== 'Admin Panel')
-      }
-      else {
-        return this.items
+      if (this.getisLogin === this.getisAdmin) {
+        return this.items.filter(item => item.title !== "Admin Panel");
+      } else {
+        return this.items;
       }
     }
   },
@@ -94,7 +90,7 @@ export default {
     console.log(this.$store.getters["product/getisAdmin"]);
     console.log("app created => ", this.getisAdmin, this.getisLogin);
   }
-}
+};
 </script>
 
 <style>
@@ -102,6 +98,4 @@ export default {
   overflow: hidden;
   left: 90%;
 }
-
-
 </style>
