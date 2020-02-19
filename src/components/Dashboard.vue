@@ -7,27 +7,35 @@
       <v-card class="mx-2 my-1">
         <canvas class="canvas" id="myChart"></canvas>
       </v-card>
-      <v-card class="my-1">
-        <canvas class="canvas" id="myChart"></canvas>
+
+        <v-card class="mx-2 my-1">
+        <canvas class="canvas" id="signupChart"></canvas>
       </v-card>
+     
     </div>
   </v-container>
 </template>
 <script>
+import moment from "moment";
 import { db, storage } from "../firebaseInit";
 import Chart from "chart.js";
 
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   data() {
-    return {};
+    return {
+      barData: [],
+      signUpData:[]
+    };
   },
 
   mounted() {
     this.createPieChart();
-    this.createBarChart();
+/*     this.createsignUpChart(); */
+    //this.createBarChart();
     console.log(new Date().toString());
+
     console.log(new Date().toDateString());
     console.log(new Date().getUTCMonth());
     console.log(new Date().getUTCDate());
@@ -45,61 +53,20 @@ export default {
     ...mapGetters("product", ["getBlogs"])
   },
   created() {
-    console.log(this.getTime());
+    this.signUpData
+    this.postBlogs();
+    console.log("before");
+
+    this.getTime();
+
+    console.log(this.barData);
+    console.log(
+      moment(new Date().toDateString()).format("MMMM Do YYYY, h:mm:ss a")
+    );
+    console.log(moment(new Date().toDateString()).add(7, "d"));
   },
   methods: {
-    createBarChart() {
-      var ctx = document.getElementById("myChart").getContext("2d");
-
-      var myChart = new Chart(ctx, {
-        type: "bar",
-        data: {
-          labels: [
-            "FriDay",
-            "SaturDay",
-            "MonDay",
-            "TuesDay",
-            "WednesDay",
-            "WednesDay"
-          ],
-          datasets: [
-            {
-              label: "# of Votes",
-              data: [12, 29, 3, 5, 2, 3],
-              backgroundColor: [
-                "rgba(255, 99, 132, 0.2)",
-                "rgba(54, 162, 235, 0.2)",
-                "rgba(255, 206, 86, 0.2)",
-                "rgba(75, 192, 192, 0.2)",
-                "rgba(153, 102, 255, 0.2)",
-                "rgba(255, 159, 64, 0.2)"
-              ],
-              borderColor: [
-                "rgba(255, 99, 132, 1)",
-                "rgba(54, 162, 235, 1)",
-                "rgba(255, 206, 86, 1)",
-                "rgba(75, 192, 192, 1)",
-                "rgba(153, 102, 255, 1)",
-                "rgba(255, 159, 64, 1)"
-              ],
-              borderWidth: 1
-            }
-          ]
-        },
-
-        options: {
-          scales: {
-            yAxes: [
-              {
-                ticks: {
-                  beginAtZero: true
-                }
-              }
-            ]
-          }
-        }
-      });
-    },
+    ...mapActions("product", ["postBlogs"]),
     async getTime() {
       let currentTime = new Date().toLocaleDateString();
       let todaysStartingTime = new Date(currentTime).getTime();
@@ -113,6 +80,9 @@ export default {
         todaysStartingTime - 5 * 86400000,
         todaysStartingTime - 6 * 86400000
       ];
+      /* array.forEach(element => {
+        
+      }); */
       let todaypost = (
         await db
           .collection("addBlogs")
@@ -120,7 +90,6 @@ export default {
           .get()
       ).size;
       console.log(todaypost);
-
       console.log(new Date(todaysStartingTime - 86400000 + 3600000));
 
       let yesterdaypost = (
@@ -155,22 +124,213 @@ export default {
           .get()
       ).size;
       console.log(fridaypost);
-      let thursday = (
+      let thursdaypost = (
         await db
           .collection("addBlogs")
           .where("postedtime", ">=", todaysStartingTime - 5 * 86400000)
           .where("postedtime", "<", todaysStartingTime - 4 * 86400000)
           .get()
       ).size;
-      console.log(thursday);
-      let wednesday = (
+      console.log(thursdaypost);
+      let wednesdaypost = (
         await db
           .collection("addBlogs")
           .where("postedtime", ">=", todaysStartingTime - 6 * 86400000)
           .where("postedtime", "<", todaysStartingTime - 5 * 86400000)
           .get()
       ).size;
-      console.log(wednesday);
+       let todaysignup = (
+        await db
+          .collection("addBlogs")
+          .where("signuptime", ">=", todaysStartingTime)
+          .get()
+      ).size;
+      console.log(todaysignup);
+      console.log(new Date(todaysStartingTime - 86400000 + 3600000));
+
+      let yesterdaysignup = (
+        await db
+          .collection("addBlogs")
+          .where("signuptime", ">=", todaysStartingTime - 86400000)
+          .where("signuptime", "<", todaysStartingTime)
+          .get()
+      ).size;
+      console.log(yesterdaysignup);
+      let sundaysignup = (
+        await db
+          .collection("addBlogs")
+       /*    .where("signuptime", ">=", todaysStartingTime - 2 * 86400000) */
+          .where("signuptime", "<", todaysStartingTime - 86400000)
+          .get()
+      ).size;
+      console.log(sundaysignup);
+      let saturdaysignup = (
+        await db
+          .collection("addBlogs")
+          .where("signuptime", ">=", todaysStartingTime - 3 * 86400000)
+          .where("signuptime", "<", todaysStartingTime - 2 * 86400000)
+          .get()
+      ).size;
+      console.log(saturdaysignup);
+      let fridaysignup = (
+        await db
+          .collection("addBlogs")
+          .where("signuptime", ">=", todaysStartingTime - 4 * 86400000)
+          .where("signuptime", "<", todaysStartingTime - 3 * 86400000)
+          .get()
+      ).size;
+      console.log(fridaysignup);
+      let thursdaysignup = (
+        await db
+          .collection("addBlogs")
+          .where("signuptime", ">=", todaysStartingTime - 5 * 86400000)
+          .where("signuptime", "<", todaysStartingTime - 4 * 86400000)
+          .get()
+      ).size;
+      console.log(thursdaysignup);
+      let wednesdaysignup = (
+        await db
+          .collection("addBlogs")
+          .where("signuptime", ">=", todaysStartingTime - 6 * 86400000)
+          .where("signuptime", "<", todaysStartingTime - 5 * 86400000)
+          .get()
+      ).size;
+
+      this.signUpData.push( wednesdaysignup,
+        thursdaysignup,
+        fridaysignup,
+        saturdaysignup,
+        sundaysignup,
+        yesterdaysignup,
+        todaysignup)
+
+      this.barData.push(
+        wednesdaypost,
+        thursdaypost,
+        fridaypost,
+        saturdaypost,
+        sundaypost,
+        yesterdaypost,
+        todaypost
+      );
+
+      let days = [
+        "Sunday",
+        "MonDay",
+        "TuesDay",
+        "WednesDay",
+        "Thursday",
+        "FriDay",
+        "SaturDay"
+      ];
+      let dayOfWeek = new Date().getDay();
+      let formatedRevDays = days
+        .slice(dayOfWeek)
+        .concat(days.slice(0, dayOfWeek))
+        .reverse();
+      console.log(this.barData);
+      this.createBarChart(formatedRevDays);
+      this.createsignUpChart(formatedRevDays)
+    },
+    createBarChart(days) {
+      var ctx = document.getElementById("myChart").getContext("2d");
+
+      var myChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: days,
+          datasets: [
+            {
+              label: " of Votes",
+              data: this.barData,
+              backgroundColor: [
+                "rgba(255, 99, 132, 0.2)",
+                "rgba(54, 162, 235, 0.2)",
+                "rgba(255, 206, 86, 0.2)",
+                "rgba(75, 192, 192, 0.2)",
+                "rgba(153, 102, 255, 0.2)",
+                "rgba(255, 159, 64, 0.2)"
+              ],
+              borderColor: [
+                "rgba(255, 99, 132, 1)",
+                "rgba(54, 162, 235, 1)",
+                "rgba(255, 206, 86, 1)",
+                "rgba(75, 192, 192, 1)",
+                "rgba(153, 102, 255, 1)",
+                "rgba(255, 159, 64, 1)"
+              ],
+              borderWidth: 1
+            }
+          ]
+        },
+
+        options: {
+          legend:{
+
+            display: false,
+          },
+          
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true
+                }
+              }
+            ]
+          }
+        }
+      });
+    },
+     createsignUpChart(days) {
+      var ctx = document.getElementById("signupChart").getContext("2d");
+
+      var myChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: days,
+          datasets: [
+            {
+              label: " of Votes",
+              data: this.signUpData,
+              backgroundColor: [
+                "rgba(255, 99, 132, 0.2)",
+                "rgba(54, 162, 235, 0.2)",
+                "rgba(255, 206, 86, 0.2)",
+                "rgba(75, 192, 192, 0.2)",
+                "rgba(153, 102, 255, 0.2)",
+                "rgba(255, 159, 64, 0.2)"
+              ],
+              borderColor: [
+                "rgba(255, 99, 132, 1)",
+                "rgba(54, 162, 235, 1)",
+                "rgba(255, 206, 86, 1)",
+                "rgba(75, 192, 192, 1)",
+                "rgba(153, 102, 255, 1)",
+                "rgba(255, 159, 64, 1)"
+              ],
+              borderWidth: 1
+            }
+          ]
+        },
+
+        options: {
+          legend:{
+
+            display: false,
+          },
+          
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true
+                }
+              }
+            ]
+          }
+        }
+      });
     },
 
     createPieChart() {
@@ -181,7 +341,7 @@ export default {
         return cur.isApproved ? (acc += 1) : acc;
       }, 0);
       let pendingPost = allBlogs - approvedblogs;
-      console.log(allBlogs, approvedblogs, pendingPost);
+      console.log("methods");
       const ctx = document.getElementById("Blog-chart");
 
       const myChart = new Chart(ctx, {
@@ -210,6 +370,7 @@ export default {
           } */
         }
       });
+      console.log("mychart", myChart);
     }
   }
 };
@@ -217,7 +378,7 @@ export default {
 <style scoped>
 .canvas {
   width: 350px !important;
-  height: 300px !important;
+  height: 260px !important;
   padding: 10px !important;
 }
 </style>

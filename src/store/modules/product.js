@@ -40,20 +40,40 @@ const actions = {
         console.log('starting');
         let Blogs = []
         let count = 0
-        let querySnapshot = await db.collection("addBlogs").get()
-        querySnapshot.forEach(async (doc) => {
-            let documentSnapshot = await db.collection("registration").doc(doc.data().userid).get()
-            let blog = { ...doc.data(), id: doc.id, name: documentSnapshot.data().name }
-            Blogs.push(blog)
-            count++
-            if (querySnapshot.size === count) {
-                return
-            }
-            console.log('Ending');
-        })
-        console.log("postBlogs", Blogs);
-        commit("setState", { Blogs })
+        let blogSnapShot = await db.collection("addBlogs").get()
+        console.log(blogSnapShot);
+        for (let index = 0; index < blogSnapShot.docs.length; index++) {
+            const blog = blogSnapShot.docs[index];
+            console.log(blog.id);
+            let userSnapshot = await db.collection("registration").doc(blog.data().userid).get()
+            console.log(userSnapshot.data());
+            let document = blog.data()
+            document.username = userSnapshot.data().name
+            document.blogid = blog.id
+
+            console.log('document', document);
+            Blogs.push(document)
+            console.log(Blogs)
+        }
+        console.log(Blogs);
+        commit("setLoading", false)
+        commit('setBlogs', Blogs)
+
     }
+    /*       querySnapshot.forEach(async (doc) => {
+  
+              console.log(doc);
+              let documentSnapshot = await db.collection("registration").doc(doc.data().userid).get()
+              let blog = { ...doc.data(), id: doc.id, name: documentSnapshot.data().name }
+              Blogs.push(blog)
+              count++
+              if (querySnapshot.size === count) {
+                  return
+              }
+              
+              console.log('Ending');
+              console.log("postBlogs", Blogs);
+          }) */
 }
 
 const getters = {
@@ -73,6 +93,7 @@ const mutations = {
             state.username = null,
             state.userid = null
     },
+    setBlogs: (state, payload) => state.Blogs = payload,
     setLoading: (state, payload) => state.loading = payload
 }
 export default {

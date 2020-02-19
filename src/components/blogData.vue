@@ -93,11 +93,11 @@ export default {
         text: "Blog-Id",
         align: "left",
         sortable: false,
-        value: "id"
+        value: "blogid"
       },
       {
         text: "Blogger Name",
-        value: "name"
+        value: "username"
       },
       {
         text: "Title",
