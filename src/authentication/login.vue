@@ -56,7 +56,8 @@ export default {
     ],
     checkbox: false,
     isAdmin:false,
-    islogin:false,    
+    islogin:false,
+  
   }),
   methods: {
     login: function() {
@@ -68,11 +69,12 @@ export default {
              snapshot.forEach(doc => {
               this.userid=doc.id
               this.isAdmin=doc.data().isAdmin
-              this.username=doc.data().name
               this.islogin=true
               this.setState({isAdmin:this.isAdmin})
               this.setState({isLogin:true})
               this.setState({userid:doc.id})
+              this.setState({username:doc.data().name})
+             
               console.log(this.isAdmin);
               console.log(this.isLogin);
               console.log(this.userid);

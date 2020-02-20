@@ -1,22 +1,44 @@
 <template>
-  <v-container>
-    <div class="d-flex flex-wrap">
-      <v-card class="my-1">
-        <canvas class="canvas" id="Blog-chart"></canvas>
-      </v-card>
-      <v-card class="mx-2 my-1">
-        <canvas class="canvas" id="myChart"></canvas>
-      </v-card>
-
+  <div class="d-flex">
+    <router-view></router-view>
+    <div class="mx-auto">
+      <div class="d-flex flex-wrap">
+        <v-card class="my-1">
+          <canvas class="canvas mx-auto" id="Blog-chart"></canvas>
+          <v-card-subtitle text--color>Total Blogs</v-card-subtitle>
+        </v-card>
         <v-card class="mx-2 my-1">
-        <canvas class="canvas" id="signupChart"></canvas>
-      </v-card>
-     
+          <canvas class="canvas mx-auto" id="myChart"></canvas>
+          <v-card-subtitle>Blogs posted</v-card-subtitle>
+        </v-card>
+
+        <v-card class="mx-1 my-1">
+          <canvas class="canvas" id="signupChart"></canvas>
+          <v-card-subtitle>Daily Signup</v-card-subtitle>
+        </v-card>
+      </div>
+
+      <div class="d-flex justify-space-around py-10">
+        <v-card height="20vh" width="15vw">
+              <v-icon>mdi-account</v-icon>
+          <div class="float-right text-right">
+              <v-card-subtitle> Total Blogs</v-card-subtitle>
+              <v-card-title>10</v-card-title>
+          </div>
+        </v-card>
+        <v-card height="20vh" width="15vw">
+          <v-card-title></v-card-title>
+        </v-card>
+        <v-card height="20vh" width="15vw">
+          <v-card-title></v-card-title>
+        </v-card>
+      </div>
     </div>
-  </v-container>
+  </div>
 </template>
 <script>
 import moment from "moment";
+
 import { db, storage } from "../firebaseInit";
 import Chart from "chart.js";
 
@@ -26,13 +48,13 @@ export default {
   data() {
     return {
       barData: [],
-      signUpData:[]
+      signUpData: []
     };
   },
 
   mounted() {
     this.createPieChart();
-/*     this.createsignUpChart(); */
+    /*     this.createsignUpChart(); */
     //this.createBarChart();
     console.log(new Date().toString());
 
@@ -53,7 +75,7 @@ export default {
     ...mapGetters("product", ["getBlogs"])
   },
   created() {
-    this.signUpData
+    this.signUpData;
     this.postBlogs();
     console.log("before");
 
@@ -63,26 +85,13 @@ export default {
     console.log(
       moment(new Date().toDateString()).format("MMMM Do YYYY, h:mm:ss a")
     );
-    console.log(moment(new Date().toDateString()).add(7, "d"));
   },
   methods: {
     ...mapActions("product", ["postBlogs"]),
     async getTime() {
       let currentTime = new Date().toLocaleDateString();
       let todaysStartingTime = new Date(currentTime).getTime();
-      console.log(todaysStartingTime);
-      let weekStartingTime = [
-        todaysStartingTime,
-        todaysStartingTime - 86400000,
-        todaysStartingTime - 2 * 86400000,
-        todaysStartingTime - 3 * 86400000,
-        todaysStartingTime - 4 * 86400000,
-        todaysStartingTime - 5 * 86400000,
-        todaysStartingTime - 6 * 86400000
-      ];
-      /* array.forEach(element => {
-        
-      }); */
+      console.log("todaysStartingTime", todaysStartingTime);
       let todaypost = (
         await db
           .collection("addBlogs")
@@ -139,18 +148,17 @@ export default {
           .where("postedtime", "<", todaysStartingTime - 5 * 86400000)
           .get()
       ).size;
-       let todaysignup = (
+      let todaysignup = (
         await db
-          .collection("addBlogs")
+          .collection("registration")
           .where("signuptime", ">=", todaysStartingTime)
           .get()
       ).size;
-      console.log(todaysignup);
-      console.log(new Date(todaysStartingTime - 86400000 + 3600000));
+      console.log("todaysignup", todaysignup);
 
       let yesterdaysignup = (
         await db
-          .collection("addBlogs")
+          .collection("registration")
           .where("signuptime", ">=", todaysStartingTime - 86400000)
           .where("signuptime", "<", todaysStartingTime)
           .get()
@@ -158,15 +166,15 @@ export default {
       console.log(yesterdaysignup);
       let sundaysignup = (
         await db
-          .collection("addBlogs")
-       /*    .where("signuptime", ">=", todaysStartingTime - 2 * 86400000) */
+          .collection("registration")
+          /*    .where("signuptime", ">=", todaysStartingTime - 2 * 86400000) */
           .where("signuptime", "<", todaysStartingTime - 86400000)
           .get()
       ).size;
       console.log(sundaysignup);
       let saturdaysignup = (
         await db
-          .collection("addBlogs")
+          .collection("registration")
           .where("signuptime", ">=", todaysStartingTime - 3 * 86400000)
           .where("signuptime", "<", todaysStartingTime - 2 * 86400000)
           .get()
@@ -174,7 +182,7 @@ export default {
       console.log(saturdaysignup);
       let fridaysignup = (
         await db
-          .collection("addBlogs")
+          .collection("registration")
           .where("signuptime", ">=", todaysStartingTime - 4 * 86400000)
           .where("signuptime", "<", todaysStartingTime - 3 * 86400000)
           .get()
@@ -182,7 +190,7 @@ export default {
       console.log(fridaysignup);
       let thursdaysignup = (
         await db
-          .collection("addBlogs")
+          .collection("registration")
           .where("signuptime", ">=", todaysStartingTime - 5 * 86400000)
           .where("signuptime", "<", todaysStartingTime - 4 * 86400000)
           .get()
@@ -190,19 +198,21 @@ export default {
       console.log(thursdaysignup);
       let wednesdaysignup = (
         await db
-          .collection("addBlogs")
+          .collection("registration")
           .where("signuptime", ">=", todaysStartingTime - 6 * 86400000)
           .where("signuptime", "<", todaysStartingTime - 5 * 86400000)
           .get()
       ).size;
 
-      this.signUpData.push( wednesdaysignup,
+      this.signUpData.push(
+        wednesdaysignup,
         thursdaysignup,
         fridaysignup,
         saturdaysignup,
         sundaysignup,
         yesterdaysignup,
-        todaysignup)
+        todaysignup
+      );
 
       this.barData.push(
         wednesdaypost,
@@ -214,7 +224,7 @@ export default {
         todaypost
       );
 
-      let days = [
+      /* let days = [
         "Sunday",
         "MonDay",
         "TuesDay",
@@ -223,14 +233,28 @@ export default {
         "FriDay",
         "SaturDay"
       ];
-      let dayOfWeek = new Date().getDay();
-      let formatedRevDays = days
-        .slice(dayOfWeek)
-        .concat(days.slice(0, dayOfWeek))
-        .reverse();
+      let dayOfWeek = new Date().getDay(); */
+
+      let daysSorted = [];
+      for (var i = 0; i < 7; i++) {
+        var startdate = moment()
+          .subtract(i, "days")
+          .format("dddd");
+        console.log("startdate", startdate);
+        daysSorted.push(startdate);
+      }
+      let formatedRevDays = daysSorted.reverse();
+
+      /*  for (var i = 0; i < 7; i++) {
+        var newDate = new Date(today.setDate(today.getDate() - 1));
+       
+        daysSorted.push(days[newDate.getDay()]);
+      }
+      let formatedRevDays = daysSorted.reverse() */
+
       console.log(this.barData);
       this.createBarChart(formatedRevDays);
-      this.createsignUpChart(formatedRevDays)
+      this.createsignUpChart(formatedRevDays);
     },
     createBarChart(days) {
       var ctx = document.getElementById("myChart").getContext("2d");
@@ -265,11 +289,10 @@ export default {
         },
 
         options: {
-          legend:{
-
-            display: false,
+          legend: {
+            display: false
           },
-          
+
           scales: {
             yAxes: [
               {
@@ -282,7 +305,7 @@ export default {
         }
       });
     },
-     createsignUpChart(days) {
+    createsignUpChart(days) {
       var ctx = document.getElementById("signupChart").getContext("2d");
 
       var myChart = new Chart(ctx, {
@@ -315,11 +338,10 @@ export default {
         },
 
         options: {
-          legend:{
-
-            display: false,
+          legend: {
+            display: false
           },
-          
+
           scales: {
             yAxes: [
               {
@@ -377,8 +399,11 @@ export default {
 </script>
 <style scoped>
 .canvas {
-  width: 350px !important;
+  width: 25vw !important;
   height: 260px !important;
   padding: 10px !important;
+}
+.card {
+  min-width: -webkit-fill-available;
 }
 </style>

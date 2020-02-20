@@ -4,7 +4,8 @@ const state = {
     isAdmin: null,
     isLogin: null,
     userid: '',
-    loading: true
+    loading: true,
+    username:'',
 
 }
 const actions = {
@@ -81,7 +82,8 @@ const getters = {
     getisAdmin: state => state.isAdmin,
     getisLogin: state => state.isLogin,
     getuserId: state => state.userid,
-    getLoading: state => state.loading
+    getLoading: state => state.loading,
+    getUserName:state=>state.username
 }
 const mutations = {
     setState: (state, payload) => {
@@ -94,7 +96,8 @@ const mutations = {
             state.userid = null
     },
     setBlogs: (state, payload) => state.Blogs = payload,
-    setLoading: (state, payload) => state.loading = payload
+    setLoading: (state, payload) => state.loading = payload,
+    setName:(state,payload)=>state.name=payload
 }
 export default {
     state,
@@ -115,7 +118,21 @@ function z() {
     })
 }
 
+ function getdays() {
+    let days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saterday', 'sunday'];
+      let today  = new Date();
+      let daysSorted = [];
 
+      for (var i = 0; i < 7; i++) {
+        var newDate = new Date(today.setDate(today.getDate() - i));
+       
+        daysSorted.push(days[newDate.getDay()]);
+      }
+      console.log(new Date(today.setDate(today.getDate()-1)));
+
+      return daysSorted
+    }
+   
 function x(a, b) {
     let y = new Promise(function (res, rej) {
         setTimeout(function () { res(62) }, 3000)

@@ -10,10 +10,12 @@ import signup from '@/authentication/signup'
 import login from '@/authentication/login'
 import navbar from '@/layout/navbar'
 import blogData from '@/components/blogData'
+import navigationDrawer from '@/layout/navigationDrawer'
 
 Vue.use(VueRouter)
 
-const routes = [{
+const routes = [
+  {
   path: '/',
   component: navbar,
   children: [{
@@ -22,6 +24,18 @@ const routes = [{
   }
 
   ]
+
+},
+{
+  path: '/dashboard',
+  component: Dashboard,
+  children: [
+    {
+      path: '/dashboard',
+      component: navigationDrawer
+    }
+  ]
+
 
 },
 {
@@ -68,6 +82,11 @@ const routes = [{
 {
   path: '/blogdata',
   component: blogData,
+
+},
+{
+  path: '/test',
+  component: navigationDrawer,
 
 }
 
