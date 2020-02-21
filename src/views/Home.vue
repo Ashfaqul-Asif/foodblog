@@ -1,8 +1,8 @@
 <template>
   <div class="home">
     <v-container>
-      <v-layout class="d-flex flex-wrap ">
-        <FoodCard class="mx-2 my-1" v-for="blog in approvedBlogs" :key="blog.id" :blog="blog" />
+      <v-layout class="d-flex flex-wrap justify-space-between ">
+        <FoodCard class="mx-3 my-3  " v-for="blog in approvedBlogs" :key="blog.id" :blog="blog" />
       </v-layout>
     </v-container>
   </div>

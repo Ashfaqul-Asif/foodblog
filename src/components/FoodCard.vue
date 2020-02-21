@@ -1,19 +1,20 @@
 <template>
-  <v-card class="card" v-on:click="onclickblog()"  width="350px">
+  <v-card class="card" v-on:click="onclickblog()"  width="30%">
     
     <v-img @click="deleteImage" class="white--text align-end" height="40vh" :src="blog.image[0]">
       <v-card-title>
-        <!--     <div>
-            {{blog.title}}
-        </div>-->
       </v-card-title>
     </v-img>
-
-    <v-card-subtitle class=" pb-0">{{blog.subtitle}}</v-card-subtitle>
+    <v-card-title>
+        <!--  {{blog.subtitle}}  -->
+    </v-card-title>
+    <v-card-subtitle class=" font-weight-black pb-0">{{blog.subtitle}}</v-card-subtitle>
+        
+      
     <v-card-actions >
       
     </v-card-actions>
-      <p class="float-right pr-10 font-weight-light grey--text " >post by-{{blog.name}}</p>
+      <p class="float-right pr-10 font-weight-light grey--text " >post by-{{blog.username}}</p>
   </v-card>
 </template>
 <script>
@@ -32,7 +33,7 @@ export default {
     onclickblog() {
       console.log(`/newsblog/${this.blog}`);
       this.$router.push({
-        path: `/newsblog/${this.blog.id}`
+        path: `/newsblog/${this.blog.blogid}`
       });
     },
     deleteImage() {

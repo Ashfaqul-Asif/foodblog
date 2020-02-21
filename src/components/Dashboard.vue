@@ -20,10 +20,11 @@
 
       <div class="d-flex justify-space-around py-10">
         <v-card height="20vh" width="15vw">
-              <v-icon>mdi-account</v-icon>
-          <div class="float-right text-right">
-              <v-card-subtitle> Total Blogs</v-card-subtitle>
-              <v-card-title>10</v-card-title>
+          <v-icon class="mt-n7 mx-2" style="font-size: 60px;">mdi-post-outline</v-icon>
+          <!-- <v-icon style="font-size:24px"  >mdi-post-outline</v-icon> -->
+          <div class="float-right text-right overflow-hidden">
+            <v-card-subtitle>Total Blogs</v-card-subtitle>
+            <v-card-title >10</v-card-title>
           </div>
         </v-card>
         <v-card height="20vh" width="15vw">
@@ -405,5 +406,8 @@ export default {
 }
 .card {
   min-width: -webkit-fill-available;
+}
+.icon{
+  height: 100px;
 }
 </style>
