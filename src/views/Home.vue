@@ -23,10 +23,10 @@ export default {
     return {};
   },
   methods: {
-    ...mapActions("product", ["postBlogs"])
+    ...mapActions("product", ["postBlogs","fetchRegistrationData"])
   },
   computed: {
-    ...mapGetters("product", ["getBlogs"]),
+    ...mapGetters("product", ["getBlogs","getRegistrationData"]),
      approvedBlogs() {
       console.log(this.getBlogs);
       let x = this.getBlogs.filter(blog => blog.isApproved);
@@ -37,6 +37,7 @@ export default {
   created() {
     //console.log(this.getBlogs);
     this.postBlogs();
+    this.fetchRegistrationData()
   }
 };
 </script>

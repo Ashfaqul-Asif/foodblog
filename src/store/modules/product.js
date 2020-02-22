@@ -6,6 +6,7 @@ const state = {
     userid: '',
     loading: true,
     username:'',
+    RegistrationData:[]
 
 }
 const actions = {
@@ -51,6 +52,7 @@ const actions = {
             let document = blog.data()
             document.username = userSnapshot.data().name
             document.blogid = blog.id
+            console.log(blog.data());
 
             console.log('document', document);
             Blogs.push(document)
@@ -60,21 +62,23 @@ const actions = {
         commit("setLoading", false)
         commit('setBlogs', Blogs)
 
+    },
+    fetchRegistrationData:async({commit})=>{
+        let regData=[]
+        let RegistrationDatas=await db.collection("registration").get()
+    /*     console.log('registrationSnapshot',registrationSnapshot); */
+      /*   for (let i = 0; i < RegistrationData.length; i++) {
+            const registrationdata = RegistrationData.docs[index];
+            RegistrationData.push(registrationdata)
+            
+        } */
+        RegistrationDatas.forEach(doc => {
+            regData.push(doc.data())
+        });
+
+        commit("setRegistrationData",regData)
     }
-    /*       querySnapshot.forEach(async (doc) => {
-  
-              console.log(doc);
-              let documentSnapshot = await db.collection("registration").doc(doc.data().userid).get()
-              let blog = { ...doc.data(), id: doc.id, name: documentSnapshot.data().name }
-              Blogs.push(blog)
-              count++
-              if (querySnapshot.size === count) {
-                  return
-              }
-              
-              console.log('Ending');
-              console.log("postBlogs", Blogs);
-          }) */
+    
 }
 
 const getters = {
@@ -83,7 +87,8 @@ const getters = {
     getisLogin: state => state.isLogin,
     getuserId: state => state.userid,
     getLoading: state => state.loading,
-    getUserName:state=>state.username
+    getUserName:state=>state.username,
+    getRegistrationData:state=>state.RegistrationData 
 }
 const mutations = {
     setState: (state, payload) => {
@@ -97,7 +102,8 @@ const mutations = {
     },
     setBlogs: (state, payload) => state.Blogs = payload,
     setLoading: (state, payload) => state.loading = payload,
-    setName:(state,payload)=>state.name=payload
+    setName:(state,payload)=>state.name=payload,
+    setRegistrationData:(state,payload)=>state.RegistrationData=payload
 }
 export default {
     state,

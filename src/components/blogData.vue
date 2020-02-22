@@ -97,7 +97,8 @@ export default {
       },
       {
         text: "Blogger Name",
-        value: "username"
+        value: "username",
+      
       },
       {
         text: "Title",

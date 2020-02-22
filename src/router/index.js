@@ -41,6 +41,11 @@ const routes = [
 {
   path: '/addfoodblog',
   component: AddFoodBlog,
+  children:[
+    {
+      path:'/addfood'
+    }
+  ]
 
 },
 {

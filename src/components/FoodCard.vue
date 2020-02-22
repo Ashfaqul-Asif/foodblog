@@ -42,7 +42,7 @@ export default {
    
   },
   created() {
-    console.log(this.blog);
+    /* console.log(this.blog);
     console.log("sdsad");
     db.collection("registration").where("this.blog.userid", "==", true)
     .get()
@@ -54,7 +54,7 @@ export default {
     })
     .catch(function(error) {
         console.log("Error getting documents: ", error);
-    });
+    }); */
    
   }
 };

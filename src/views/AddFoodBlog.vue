@@ -1,8 +1,8 @@
 <template>
  <v-container >
-
-   <h2 class="light-blue--text" style=" text-align: center ">Admin panel</h2>
-       <v-form
+   <v-card>
+    <h2 class="light-blue--text pt-2" style=" text-align: center "> Upload Blogs </h2>
+   <v-form class="pa-5"
     ref="form"
     v-model="valid"
     lazy-validation
@@ -30,8 +30,11 @@
       @click="confirm"
     >
       Confirm
-    </v-btn>
-    <input type="file" @change="previewFiles" multiple>
+    </v-btn >
+    
+
+    <input  class="file" type="file" @change="previewFiles" multiple>
+   
     <v-btn
       color="error"
       class="mr-4"
@@ -39,7 +42,13 @@
     >
       Reset Form
     </v-btn>
+     
+
+
   </v-form>
+   </v-card>
+
+   
  </v-container>
 </template>
 
@@ -139,4 +148,5 @@ import { mapGetters } from "vuex"
  .img{
    width: 20%
  }
+ 
 </style>

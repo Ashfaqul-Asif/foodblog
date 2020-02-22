@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex">
+  <div class="d-flex div">
     <router-view></router-view>
     <div class="mx-auto">
       <div class="d-flex flex-wrap">
@@ -19,19 +19,21 @@
       </div>
 
       <div class="d-flex justify-space-around py-10">
-        <v-card height="20vh" width="15vw">
-          <v-icon class="mt-n7 mx-2" style="font-size: 60px;">mdi-post-outline</v-icon>
+        <v-card height="20vh" width="20vw">
+          <v-icon class="mx-2" style="font-size: 60px;">mdi-post-outline</v-icon>
           <!-- <v-icon style="font-size:24px"  >mdi-post-outline</v-icon> -->
           <div class="float-right text-right overflow-hidden">
             <v-card-subtitle>Total Blogs</v-card-subtitle>
-            <v-card-title >10</v-card-title>
+            <v-card-title>{{totalblogs}}</v-card-title>
           </div>
         </v-card>
-        <v-card height="20vh" width="15vw">
-          <v-card-title></v-card-title>
-        </v-card>
-        <v-card height="20vh" width="15vw">
-          <v-card-title></v-card-title>
+        <v-card height="20vh" width="20vw">
+          <v-icon class="mx-2" style="font-size: 60px;">mdi-account-multiple</v-icon>
+
+          <div class="float-right text-right overflow-hidden">
+            <v-card-subtitle>Total Account</v-card-subtitle>
+            <v-card-title>{{totalAccount}}</v-card-title>
+          </div>
         </v-card>
       </div>
     </div>
@@ -73,12 +75,19 @@ export default {
   },
 
   computed: {
-    ...mapGetters("product", ["getBlogs"])
+    ...mapGetters("product", ["getBlogs", "getRegistrationData", "getisAdmin"]),
+    totalblogs() {
+      return this.getBlogs.length;
+    },
+    totalAccount() {
+      return this.getRegistrationData.length;
+    }
   },
   created() {
     this.signUpData;
-    this.postBlogs();
+    this.fetchRegistrationData();
     console.log("before");
+    console.log("total", this.totalblogs);
 
     this.getTime();
 
@@ -88,7 +97,8 @@ export default {
     );
   },
   methods: {
-    ...mapActions("product", ["postBlogs"]),
+    ...mapActions("product", ["fetchRegistrationData"]),
+
     async getTime() {
       let currentTime = new Date().toLocaleDateString();
       let todaysStartingTime = new Date(currentTime).getTime();
@@ -266,7 +276,7 @@ export default {
           labels: days,
           datasets: [
             {
-              label: " of Votes",
+              label: " Daily Signup",
               data: this.barData,
               backgroundColor: [
                 "rgba(255, 99, 132, 0.2)",
@@ -315,7 +325,7 @@ export default {
           labels: days,
           datasets: [
             {
-              label: " of Votes",
+              label: "Number of Blogs",
               data: this.signUpData,
               backgroundColor: [
                 "rgba(255, 99, 132, 0.2)",
@@ -407,7 +417,10 @@ export default {
 .card {
   min-width: -webkit-fill-available;
 }
-.icon{
+.icon {
   height: 100px;
+}
+.div {
+  background-color: #eeeeee;
 }
 </style>

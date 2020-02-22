@@ -15,29 +15,24 @@
             </v-list-item-content>
           </v-list-item>
         </template>
-
         <v-divider></v-divider>
-
         <v-list dense>
-          <v-list-item v-for="item in items" :key="item.title">
+          <v-list-item link v-for="item in items" :key="item.title">
             <v-list-item-icon>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
-
             <v-list-item-content>
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
+              <v-list-item-title class="item" @click="onClickItem(item)">{{ item.title }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>
-          
-      <template v-slot:append>
-        <div class="pa-2">
-          <v-btn color="secondary" block>Logout</v-btn>
-        </div>
-      </template>
+
+        <template v-slot:append>
+          <div class="pa-2">
+            <v-btn color="secondary" block>Logout</v-btn>
+          </div>
+        </template>
       </v-navigation-drawer>
-       
-        
     </v-card>
   </div>
 </template>
@@ -48,17 +43,34 @@ export default {
   data() {
     return {
       items: [
-        { title: "Home", icon: "mdi-home-city" },
-        { title: "Blog Data", icon: "mdi-account" },
-        { title: "Users", icon: "mdi-account-group-outline" }
+        {
+          title: "dashboard",
+          icon: "mdi-view-dashboard-variant",
+          route: "/dashboard"
+        },
+        { title: "Blog Data", icon: "mdi-table", route: "/blogdata" },
+        { title: "Post New blogs", icon: "mdi-post",route:"/addfoodblog" },
+ /*        {title:"user Dashboard",  icon: "mdi-view-dashboard-variant",route:"/dashboarduser"}, */
+      
       ]
     };
   },
   computed: {
     ...mapGetters("product", ["getUserName", "getisLogin"])
+  },
+  methods: {
+    onClickItem(item) {
+      console.log(this.$router.history.current.path);
+      if (this.$router.history.current.path !== item.route) {
+        this.$router.push(item.route);
+      }
+    }
   }
 };
 </script>
 
 <style scopded>
+.item {
+  cursor: pointer;
+}
 </style>
