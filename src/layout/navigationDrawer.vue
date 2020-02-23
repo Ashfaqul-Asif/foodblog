@@ -2,7 +2,7 @@
   <div>
     <v-card height="100vh" width="18vw">
       <v-navigation-drawer absolute permanent height="100vh" width="18vw">
-        <template v-slot:prepend>
+       <!--  <template v-slot:prepend>
           <v-list-item two-line>
             <v-list-item-avatar>
               <img
@@ -14,7 +14,7 @@
               <v-list-item-subtitle v-if="getisLogin">Logged In {{getUserName}}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
-        </template>
+        </template> -->
         <v-divider></v-divider>
         <v-list dense>
           <v-list-item link v-for="item in items" :key="item.title">

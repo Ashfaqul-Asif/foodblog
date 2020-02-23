@@ -1,14 +1,39 @@
 <template>
   <v-container>
-    <v-data-table :loading="loading" :headers="headers" :items="getBlogs" class="elevation-1">
+    <v-data-table
+      :loading="loading"
+      :headers="headers"
+      :search="search"
+      :items="getBlogs"
+      class="elevation-3 px-4 py-6"
+    >
       <template v-slot:top>
-        <v-toolbar flat color="success">
-          <v-toolbar-title class="white--text">BLOG DETAILS</v-toolbar-title>
+        <v-toolbar flat color="white">
+          <v-toolbar-title class="white--blue">BLOG DETAILS</v-toolbar-title>
 
-          <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
+
+          <v-combobox
+            @change="onChange"
+            v-model="select"
+            class="pt-5"
+            :items="items"
+            label="Combobox"
+          ></v-combobox>
+
+          <v-spacer></v-spacer>
+          <!-- {{pendingBlogs}} -->
+
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
         </v-toolbar>
       </template>
+
       <!--    <template v-slot:loading>
       
            <pulse-loader :loading="loading" :color="color" :size="size"></pulse-loader>
@@ -65,7 +90,6 @@
         <v-icon medium @click="deleteItem(item)">mdi-delete</v-icon>
       </template>
     </v-data-table>
-   
   </v-container>
 </template>
 
@@ -85,9 +109,11 @@ export default {
     selectedImage: "",
     selectedcontent: "",
     selectedTextArea: "",
-
+    search: "",
     color: "#fff",
     size: "10px",
+    select: ["All Blogs"],
+    items: ["All Blogs", "Approved Blogs", "Pending Blogs"],
     headers: [
       {
         text: "Blog-Id",
@@ -97,8 +123,7 @@ export default {
       },
       {
         text: "Blogger Name",
-        value: "username",
-      
+        value: "username"
       },
       {
         text: "Title",
@@ -147,6 +172,9 @@ export default {
 
   computed: {
     ...mapGetters("product", ["getBlogs", "getLoading"]),
+    pendingBlogs(){
+     return this.getBlogs.filter(blog=>blog.isApproved===false)
+    },
     pendingBlog() {
       let totalBlogs = this.getBlogs.reduce((acc, cur) => {
         if (cur.isApproved) {
@@ -181,6 +209,10 @@ export default {
   },
   methods: {
     ...mapActions("product", ["postBlogs"]),
+    onChange(item) {
+    
+    console.log(item);
+    },
     approveBlog(item) {
       console.log(event);
       confirm("Are you sure you want to approve this Blog") &&
@@ -202,7 +234,8 @@ export default {
       /* const index = this.getBlogs.indexOf(item); */
       console.log(item.id);
       confirm("Are you sure you want to delete this Blog?") &&
-        db.collection("addBlogs")
+        db
+          .collection("addBlogs")
           .doc(item.id)
           .delete()
           .then(function() {

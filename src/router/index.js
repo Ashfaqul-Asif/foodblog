@@ -16,84 +16,101 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-  path: '/',
-  component: navbar,
-  children: [{
     path: '/',
-    component: Home
-  }
-
-  ]
-
-},
-{
-  path: '/dashboard',
-  component: Dashboard,
-  children: [
+    component: navbar,
+    children: [{
+      path: '/',
+      component: Home
+    },
     {
       path: '/dashboard',
-      component: navigationDrawer
-    }
-  ]
-
-
-},
-{
-  path: '/addfoodblog',
-  component: AddFoodBlog,
-  children:[
+      component: Dashboard
+    },
     {
-      path:'/addfood'
-    }
-  ]
+      path:'/addfoodblog',
+      component:AddFoodBlog
+    
+    },
+    {
+      path: '/blogdata',
+      component: blogData,
+    },
+  /*   {
+      path:'/'
+      component:
+    } */
 
-},
-{
-  path: '/newsblog/:id',
-  name: '',
-  component: Newsblog,
+    ]
+
+  },
+  {
+    path: '/dashboard',
+    component: Dashboard,
+    children: [
+      {
+        path: '/dashboard',
+        component: navigationDrawer
+      }
+    ]
 
 
-},
-{
-  path: '/signup',
-  name: '',
-  component: signup,
+  },
+  {
+    path: '/addfoodblog',
+    component: AddFoodBlog,
+    children: [
+      {
+        path: '/addfood'
+      }
+    ]
 
-},
-{
-  path: '/login',
-  name: '',
-  component: login,
+  },
+  {
+    path: '/newsblog/:id',
+    name: '',
+    component: Newsblog,
 
 
-},
-{
-  path: '/custombutton',
-  component: customButton,
+  },
+  {
+    path: '/signup',
+    name: '',
+    component: signup,
 
-},
-{
+  },
+  {
+    path: '/login',
+    name: '',
+    component: login,
 
-  path: '/customform',
-  component: customform,
 
-},
-{
-  path: '/dashboard',
-  component: Dashboard,
+  },
+  {
+    path: '/custombutton',
+    component: customButton,
 
-},
-{
-  path: '/blogdata',
-  component: blogData,
+  },
+  {
 
-},
-{
-  path: '/test',
-  component: navigationDrawer,
+    path: '/customform',
+    component: customform,
 
-}
+  },
+  {
+    path: '/dashboard',
+    component: Dashboard,
+
+  },
+  {
+    path: '/blogdata',
+    component: blogData,
+
+  },
+  {
+    path: '/test',
+    component: navigationDrawer,
+
+  }
 
 
 ]

@@ -1,21 +1,27 @@
 <template>
   <div class="d-flex div">
     <router-view></router-view>
-    <div class="mx-auto">
-      <div class="d-flex flex-wrap">
-        <v-card class="my-1">
-          <canvas class="canvas mx-auto" id="Blog-chart"></canvas>
-          <v-card-subtitle text--color>Total Blogs</v-card-subtitle>
-        </v-card>
-        <v-card class="mx-2 my-1">
-          <canvas class="canvas mx-auto" id="myChart"></canvas>
-          <v-card-subtitle>Blogs posted</v-card-subtitle>
-        </v-card>
+    <v-container class="justify-center">
+      <div class="justify-space-around">
+        <div class="d-flex flex-wrap">
+          <v-card class="my-1">
+            <canvas class="canvas mx-auto" id="Blog-chart"></canvas>
+            <v-card-subtitle text--color>Total Blogs</v-card-subtitle>
+          </v-card>
+          <v-card class="mx-1 my-1">
+            <canvas class="canvas mx-auto" id="myChart"></canvas>
+            <v-card-subtitle>Blogs posted</v-card-subtitle>
+          </v-card>
 
-        <v-card class="mx-1 my-1">
-          <canvas class="canvas" id="signupChart"></canvas>
-          <v-card-subtitle>Daily Signup</v-card-subtitle>
-        </v-card>
+          <v-card class="mx-1 my-1">
+            <canvas class="canvas" id="signupChart"></canvas>
+            <v-card-subtitle>Daily Signup</v-card-subtitle>
+          </v-card>
+          <v-card>
+            <canvas class="canvas" id="individualBlogs"></canvas>
+            <v-card-subtitle>Your Blogs</v-card-subtitle>
+          </v-card>
+        </div>
       </div>
 
       <div class="d-flex justify-space-around py-10">
@@ -36,7 +42,7 @@
           </div>
         </v-card>
       </div>
-    </div>
+    </v-container>
   </div>
 </template>
 <script>
@@ -57,6 +63,8 @@ export default {
 
   mounted() {
     this.createPieChart();
+    this.createIndividualPieChart()
+   
     /*     this.createsignUpChart(); */
     //this.createBarChart();
     console.log(new Date().toString());
@@ -75,15 +83,26 @@ export default {
   },
 
   computed: {
-    ...mapGetters("product", ["getBlogs", "getRegistrationData", "getisAdmin"]),
+    ...mapGetters("product", [
+      "getBlogs",
+      "getRegistrationData",
+      "getisAdmin",
+      "getUserName"
+    ]),
     totalblogs() {
       return this.getBlogs.length;
     },
     totalAccount() {
       return this.getRegistrationData.length;
+    },
+    individualBlogs() {
+      return this.getBlogs.filter(blog => blog.username === this.getUserName);
     }
   },
   created() {
+    console.log("username", this.$store.getters["product/getUserName"]);
+    console.log("sdsds", this.individualBlogs);
+    console.log("Blogs", this.getBlogs);
     this.signUpData;
     this.fetchRegistrationData();
     console.log("before");
@@ -316,6 +335,42 @@ export default {
         }
       });
     },
+    createIndividualPieChart() {
+      let IntotalBlogs= this.individualBlogs.length
+       let Inapprovedblogs = this.individualBlogs.reduce((acc, cur) => {
+        return cur.isApproved ? (acc += 1) : acc;
+      }, 0);
+    let InpendingPost=IntotalBlogs-Inapprovedblogs
+    console.log('IntotalBlogs',IntotalBlogs,Inapprovedblogs,InpendingPost);
+
+      var ctx = document.getElementById("individualBlogs").getContext("2d");
+       const myChart = new Chart(ctx, {
+        type: "pie",
+        data: {
+          labels: ["allBlogs", "approvedblogs", "pendingPost"],
+          datasets: [
+            {
+              label: "Number of Blogs",
+              data: [IntotalBlogs, Inapprovedblogs, InpendingPost],
+              backgroundColor: ["firebrick", "lightblue", "yellow"],
+              borderColor: ["white", "white", "white"],
+              borderWidth: 2
+            }
+          ]
+        },
+
+        options: {
+          responsive: true
+          /*  scales:{
+            xAxes:[{
+              ticks:{
+                fontSize:10
+              }
+            }]
+          } */
+        }
+      })
+    },
     createsignUpChart(days) {
       var ctx = document.getElementById("signupChart").getContext("2d");
 
@@ -410,7 +465,7 @@ export default {
 </script>
 <style scoped>
 .canvas {
-  width: 25vw !important;
+  width: 24vw !important;
   height: 260px !important;
   padding: 10px !important;
 }
@@ -421,6 +476,6 @@ export default {
   height: 100px;
 }
 .div {
-  background-color: #eeeeee;
+  background-color: whitesmoke;
 }
 </style>
