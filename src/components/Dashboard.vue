@@ -3,7 +3,7 @@
     <router-view></router-view>
     <v-container class="justify-center">
       <div class="justify-space-around">
-        <div class="d-flex flex-wrap">
+        <div v-if="getisAdmin" class="d-flex flex-wrap">
           <v-card class="my-1">
             <canvas class="canvas mx-auto" id="Blog-chart"></canvas>
             <v-card-subtitle text--color>Total Blogs</v-card-subtitle>
@@ -17,14 +17,20 @@
             <canvas class="canvas" id="signupChart"></canvas>
             <v-card-subtitle>Daily Signup</v-card-subtitle>
           </v-card>
+        </div>
+        <div class="d-flex flex-wrap justify-space-between">
           <v-card>
-            <canvas class="canvas" id="individualBlogs"></canvas>
+            <canvas class="canvas1" id="individualBlogs"></canvas>
+            <v-card-subtitle>Your Blogs</v-card-subtitle>
+          </v-card>
+          <v-card>
+            <canvas class="canvas1" id="Individualbar-chart"></canvas>
             <v-card-subtitle>Your Blogs</v-card-subtitle>
           </v-card>
         </div>
       </div>
 
-      <div class="d-flex justify-space-around py-10">
+      <div v-if="getisadmin" class="d-flex justify-space-around py-10">
         <v-card height="20vh" width="20vw">
           <v-icon class="mx-2" style="font-size: 60px;">mdi-post-outline</v-icon>
           <!-- <v-icon style="font-size:24px"  >mdi-post-outline</v-icon> -->
@@ -57,14 +63,19 @@ export default {
   data() {
     return {
       barData: [],
-      signUpData: []
+      signUpData: [],
+      formatDays: []
     };
   },
 
   mounted() {
-    this.createPieChart();
-    this.createIndividualPieChart()
-   
+    if (this.getisAdmin) {
+      this.createPieChart();
+    }
+
+    this.createIndividualPieChart();
+    this.createIndividualBarChart();
+
     /*     this.createsignUpChart(); */
     //this.createBarChart();
     console.log(new Date().toString());
@@ -336,15 +347,33 @@ export default {
       });
     },
     createIndividualPieChart() {
-      let IntotalBlogs= this.individualBlogs.length
-       let Inapprovedblogs = this.individualBlogs.reduce((acc, cur) => {
+      /*       let currentTime = new Date().toLocaleDateString();
+      let todaysStartingTime = new Date(currentTime).getTime();
+      console.log("todaysStartingTime", todaysStartingTime);
+      let todaypost = (
+        await db
+          .collection("addBlogs")
+          .where("postedtime", ">=", todaysStartingTime)
+          .get()
+      ).size;
+      console.log(todaypost); */
+      let currentTime = new Date().toLocaleDateString();
+      let todaysStartingTime = new Date(currentTime).getTime();
+      console.log(this.individualBlogs);
+
+      this.individualBlogs.forEach(blog => {
+        let x = blog.approvedtime;
+        console.log(x);
+      });
+      let IntotalBlogs = this.individualBlogs.length;
+      let Inapprovedblogs = this.individualBlogs.reduce((acc, cur) => {
         return cur.isApproved ? (acc += 1) : acc;
       }, 0);
-    let InpendingPost=IntotalBlogs-Inapprovedblogs
-    console.log('IntotalBlogs',IntotalBlogs,Inapprovedblogs,InpendingPost);
+      let InpendingPost = IntotalBlogs - Inapprovedblogs;
+      console.log("IntotalBlogs", IntotalBlogs, Inapprovedblogs, InpendingPost);
 
       var ctx = document.getElementById("individualBlogs").getContext("2d");
-       const myChart = new Chart(ctx, {
+      const myChart = new Chart(ctx, {
         type: "pie",
         data: {
           labels: ["allBlogs", "approvedblogs", "pendingPost"],
@@ -369,7 +398,56 @@ export default {
             }]
           } */
         }
-      })
+      });
+    },
+    createIndividualBarChart() {
+      let currentTime = new Date().toLocaleDateString();
+      let todaysStartingTime = new Date(currentTime).getTime();
+      let lastweekStartingTime = todaysStartingTime - 7 * 86400000;
+      console.log(lastweekStartingTime);
+
+      let daysSorted = [];
+      for (var i = 0; i < 7; i++) {
+        var startdate = moment()
+          .subtract(i, "days")
+          .format("dddd");
+        console.log("startdate", startdate);
+        daysSorted.push(startdate);
+      }
+      console.log(daysSorted);
+
+      let formatedRevDays = daysSorted.reverse();
+
+      var ctx = document.getElementById("Individualbar-chart").getContext("2d");
+
+      var myChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: daysSorted,
+          datasets: [
+            {
+              label: "Population (millions)",
+              backgroundColor: [
+                "#3e95cd",
+                "#8e5ea2",
+                "#3cba9f",
+                "#e8c3b9",
+                "teal",
+                "lightBlue",
+                "grey"
+              ],
+              data: [0, 0, 0, 0, 1, 0, 0]
+            }
+          ]
+        },
+        options: {
+          legend: { display: false },
+          title: {
+            display: true,
+            text: "Your Daily Posted Blogs"
+          }
+        }
+      });
     },
     createsignUpChart(days) {
       var ctx = document.getElementById("signupChart").getContext("2d");
@@ -468,6 +546,10 @@ export default {
   width: 24vw !important;
   height: 260px !important;
   padding: 10px !important;
+}
+.canvas1 {
+  width: 35vw !important;
+  height: 260px;
 }
 .card {
   min-width: -webkit-fill-available;

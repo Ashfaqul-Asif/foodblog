@@ -4,17 +4,17 @@
       :loading="loading"
       :headers="headers"
       :search="search"
-      :items="getBlogs"
+      :items="blogs"
       class="elevation-3 px-4 py-6"
     >
       <template v-slot:top>
-        <v-toolbar flat color="white">
-          <v-toolbar-title class="white--blue">BLOG DETAILS</v-toolbar-title>
+        <v-toolbar class flat color="white">
+          <v-toolbar-title  class=" blue--text">BLOG DETAILS</v-toolbar-title>
 
           <v-spacer></v-spacer>
 
           <v-combobox
-            @change="onChange"
+            @change="onChangeComboBox"
             v-model="select"
             class="pt-5"
             :items="items"
@@ -25,6 +25,7 @@
           <!-- {{pendingBlogs}} -->
 
           <v-text-field
+          
             v-model="search"
             append-icon="mdi-magnify"
             label="Search"
@@ -33,14 +34,9 @@
           ></v-text-field>
         </v-toolbar>
       </template>
+       
 
-      <!--    <template v-slot:loading>
-      
-           <pulse-loader :loading="loading" :color="color" :size="size"></pulse-loader>
-        
-      </template>-->
-
-      <template v-slot:item.textarea="{item}">
+      <template class="" v-slot:item.textarea="{item}">
         <p @click="openTextAreaDialog(item.id)">{{item.textarea.substring(0,16)}}...</p>
         <v-dialog v-model="dialogtextarea" max-width="340">
           <v-card>
@@ -103,6 +99,7 @@ export default {
     PulseLoader
   },
   data: () => ({
+    blogs:[],
     loading: true,
     dialog: false,
     dialogtextarea: false,
@@ -203,15 +200,56 @@ export default {
 
   created() {
     // let that =this
+    this.blogs=this.getBlogs
     this.postBlogs().then(res => {
       this.loading = false;
     });
   },
   methods: {
     ...mapActions("product", ["postBlogs"]),
-    onChange(item) {
-    
-    console.log(item);
+   async onChangeComboBox(item) {
+      let Blogs =[]
+     if (item==='Approved Blogs') {
+       this.loading=true
+        let blogSnapShot = await db.collection("addBlogs").where("isApproved","==",true).get()
+        console.log(blogSnapShot);
+        for (let index = 0; index < blogSnapShot.docs.length; index++) {
+            const blog = blogSnapShot.docs[index];
+            console.log(blog.id);
+            let userSnapshot = await db.collection("registration").doc(blog.data().userid).get()
+            console.log(userSnapshot.data());
+            let document = blog.data()
+            document.username = userSnapshot.data().name
+            document.blogid = blog.id
+            Blogs.push(document)
+            console.log(Blogs);
+        }
+            this.blogs=Blogs
+              this.loading=false
+     }
+     else if (item ==='Pending Blogs') {
+      this.loading=true
+        let blogSnapShot = await db.collection("addBlogs").where("isApproved","==",false).get()
+        console.log(blogSnapShot);
+        for (let index = 0; index < blogSnapShot.docs.length; index++) {
+            const blog = blogSnapShot.docs[index];
+            console.log(blog.id);
+            let userSnapshot = await db.collection("registration").doc(blog.data().userid).get()
+            console.log(userSnapshot.data());
+            let document = blog.data()
+            document.username = userSnapshot.data().name
+            document.blogid = blog.id
+            Blogs.push(document)
+            console.log(Blogs);
+        }
+            this.blogs=Blogs
+              this.loading=false
+       
+     } else if (item="All Blogs") {
+       this.loading=true
+       this.blogs=this.getBlogs
+       this.loading=false
+     } 
     },
     approveBlog(item) {
       console.log(event);

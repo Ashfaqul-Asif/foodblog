@@ -41,7 +41,7 @@ const actions = {
         commit("setLoading", true)
         console.log('starting');
         let Blogs = []
-        let count = 0
+        // let count = 0
         let blogSnapShot = await db.collection("addBlogs").get()
         console.log(blogSnapShot);
         for (let index = 0; index < blogSnapShot.docs.length; index++) {
