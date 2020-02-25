@@ -11,6 +11,7 @@ import login from '@/authentication/login'
 import navbar from '@/layout/navbar'
 import blogData from '@/components/blogData'
 import navigationDrawer from '@/layout/navigationDrawer'
+import store from '@/store'
 
 Vue.use(VueRouter)
 
@@ -35,6 +36,13 @@ const routes = [
       path: '/blogdata',
       component: blogData,
     },
+    {
+      path: '/newsblog/:id',
+      name: '',
+      component: Newsblog,
+  
+  
+    }
   /*   {
       path:'/'
       component:
@@ -43,7 +51,7 @@ const routes = [
     ]
 
   },
-  {
+  /* {
     path: '/dashboard',
     component: Dashboard,
     children: [
@@ -71,7 +79,7 @@ const routes = [
     component: Newsblog,
 
 
-  },
+  }, */
   {
     path: '/signup',
     name: '',
@@ -82,24 +90,18 @@ const routes = [
     path: '/login',
     name: '',
     component: login,
-
-
   },
   {
     path: '/custombutton',
     component: customButton,
-
   },
   {
-
     path: '/customform',
     component: customform,
-
   },
   {
     path: '/dashboard',
     component: Dashboard,
-
   },
   {
     path: '/blogdata',
@@ -121,4 +123,25 @@ const router = new VueRouter({
   routes
 })
 
+
+console.log(store,store.state.product.getisAdmin);
+ 
+  router.beforeEach((to, from, next) => {
+    /* if (!store.state.product.isLogin) next({ name: '/dashboard' })
+    else next() */
+    console.log(to);
+    console.log(from);
+    console.log(next);
+    if (to.path==='/') {
+      next()
+      console.log('to');
+    }
+    else if (to.path==='/dashboard' && !store.state.product.isLogin) {
+      next("/")
+      console.log('to');
+       
+    }
+    
+    next()
+  })
 export default router
