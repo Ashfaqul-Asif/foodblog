@@ -1,57 +1,65 @@
 <template>
-  <div class="d-flex div">
-    <router-view></router-view>
-    <v-container class="justify-center">
-      <div class="justify-space-around">
-        <div v-if="getisAdmin" class="d-flex flex-wrap">
-          <v-card class="my-1">
-            <canvas class="canvas mx-auto" id="Blog-chart"></canvas>
-            <v-card-subtitle text--color>Total Blogs</v-card-subtitle>
-          </v-card>
-          <v-card class="mx-1 my-1">
-            <canvas class="canvas mx-auto" id="myChart"></canvas>
-            <v-card-subtitle>Blogs posted</v-card-subtitle>
-          </v-card>
+  <div>
+    <div class="d-flex div">
+      <router-view></router-view>
+      <v-container class="justify-center">
+        <div class="justify-space-around">
+          <div v-if="getisAdmin" class="d-flex flex-wrap">
+            <v-card class="my-1">
+              <canvas class="canvas mx-auto" id="Blog-chart"></canvas>
+              <v-card-subtitle text--color>Total Blogs</v-card-subtitle>
+            </v-card>
+            <v-card class="mx-1 my-1">
+              <canvas class="canvas mx-auto" id="myChart"></canvas>
+              <v-card-subtitle>Blogs posted</v-card-subtitle>
+            </v-card>
 
-          <v-card class="mx-1 my-1">
-            <canvas class="canvas" id="signupChart"></canvas>
-            <v-card-subtitle>Daily Signup</v-card-subtitle>
+            <v-card class="mx-1 my-1">
+              <canvas class="canvas" id="signupChart"></canvas>
+              <v-card-subtitle>Daily Signup</v-card-subtitle>
+            </v-card>
+          </div>
+          <div class="d-flex flex-wrap justify-space-between">
+            <v-card>
+              <canvas class="canvas1" id="individualBlogs"></canvas>
+              <v-card-subtitle>Your Blogs</v-card-subtitle>
+            </v-card>
+            <v-card>
+              <canvas class="canvas1" id="Individualbar-chart"></canvas>
+              <v-card-subtitle>Your Blogs</v-card-subtitle>
+            </v-card>
+          </div>
+        </div>
+
+        <div v-if="getisAdmin" class="d-flex justify-space-around py-10">
+          <v-card height="20vh" width="20vw">
+            <v-icon class="mx-2" style="font-size: 60px;">mdi-post-outline</v-icon>
+            <!-- <v-icon style="font-size:24px"  >mdi-post-outline</v-icon> -->
+            <div class="float-right text-right overflow-hidden">
+              <v-card-subtitle>Total Blogs</v-card-subtitle>
+              <v-card-title>{{totalblogs}}</v-card-title>
+            </div>
+          </v-card>
+          <v-card height="20vh" width="20vw">
+            <v-icon class="mx-2" style="font-size: 60px;">mdi-account-multiple</v-icon>
+
+            <div class="float-right text-right overflow-hidden">
+              <v-card-subtitle>Total Account</v-card-subtitle>
+              <v-card-title>{{totalAccount}}{{getuserId}}</v-card-title>
+            </div>
           </v-card>
         </div>
-        <div class="d-flex flex-wrap justify-space-between">
-          <v-card>
-            <canvas class="canvas1" id="individualBlogs"></canvas>
-            <v-card-subtitle>Your Blogs</v-card-subtitle>
-          </v-card>
-          <v-card>
-            <canvas class="canvas1" id="Individualbar-chart"></canvas>
-            <v-card-subtitle>Your Blogs</v-card-subtitle>
-          </v-card>
-        </div>
-      </div>
-
-      <div v-if="getisadmin" class="d-flex justify-space-around py-10">
-        <v-card height="20vh" width="20vw">
-          <v-icon class="mx-2" style="font-size: 60px;">mdi-post-outline</v-icon>
-          <!-- <v-icon style="font-size:24px"  >mdi-post-outline</v-icon> -->
-          <div class="float-right text-right overflow-hidden">
-            <v-card-subtitle>Total Blogs</v-card-subtitle>
-            <v-card-title>{{totalblogs}}</v-card-title>
-          </div>
-        </v-card>
-        <v-card height="20vh" width="20vw">
-          <v-icon class="mx-2" style="font-size: 60px;">mdi-account-multiple</v-icon>
-
-          <div class="float-right text-right overflow-hidden">
-            <v-card-subtitle>Total Account</v-card-subtitle>
-            <v-card-title>{{totalAccount}}</v-card-title>
-          </div>
-        </v-card>
-      </div>
+      </v-container>
+    </div>
+    <v-container>
+      <v-layout  class=" justify-space-between ">
+        <FoodCard  class="mx-3 my-3 card" v-for="blog in individualBlogs" :key="blog.id" :blog="blog" />
+      </v-layout>
     </v-container>
   </div>
 </template>
 <script>
+import FoodCard from "@/components/FoodCard";
 import moment from "moment";
 
 import { db, storage } from "../firebaseInit";
@@ -60,6 +68,9 @@ import Chart from "chart.js";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
+  components: {
+    FoodCard
+  },
   data() {
     return {
       barData: [],
@@ -98,7 +109,8 @@ export default {
       "getBlogs",
       "getRegistrationData",
       "getisAdmin",
-      "getUserName"
+      "getUserName",
+      "getuserId"
     ]),
     totalblogs() {
       return this.getBlogs.length;
@@ -118,6 +130,7 @@ export default {
     this.fetchRegistrationData();
     console.log("before");
     console.log("total", this.totalblogs);
+    console.log("sdsad", this.getuserId);
 
     this.getTime();
 
@@ -127,10 +140,11 @@ export default {
     );
   },
   methods: {
-    ...mapActions("product", ["fetchRegistrationData"]),
+    ...mapActions("product", ["fetchRegistrationData", "postBlogs"]),
 
     async getTime() {
       let currentTime = new Date().toLocaleDateString();
+      console.log(currentTime);
       let todaysStartingTime = new Date(currentTime).getTime();
       console.log("todaysStartingTime", todaysStartingTime);
       let todaypost = (
@@ -145,7 +159,7 @@ export default {
       let yesterdaypost = (
         await db
           .collection("addBlogs")
-          //.where("postedtime", ">=", todaysStartingTime - 86400000)
+          .where("postedtime", ">=", todaysStartingTime - 86400000)
           .where("postedtime", "<", todaysStartingTime)
           .get()
       ).size;
@@ -294,8 +308,10 @@ export default {
       let formatedRevDays = daysSorted.reverse() */
 
       console.log(this.barData);
-      this.createBarChart(formatedRevDays);
-      this.createsignUpChart(formatedRevDays);
+      if (this.getisAdmin) {
+        this.createBarChart(formatedRevDays);
+        this.createsignUpChart(formatedRevDays);
+      }
     },
     createBarChart(days) {
       var ctx = document.getElementById("myChart").getContext("2d");
@@ -400,11 +416,72 @@ export default {
         }
       });
     },
-    createIndividualBarChart() {
+
+    async createIndividualBarChart() {
       let currentTime = new Date().toLocaleDateString();
       let todaysStartingTime = new Date(currentTime).getTime();
-      let lastweekStartingTime = todaysStartingTime - 7 * 86400000;
+      let lastweekStartingTime = todaysStartingTime - 6 * 86400000;
+      let x = new Date(lastweekStartingTime).toDateString();
       console.log(lastweekStartingTime);
+      console.log(x);
+      let lastWeekData = [0, 0, 0, 0, 0, 0, 0];
+
+      let lastWeekSnapShot = await db
+        .collection("addBlogs")
+        .where("postedtime", ">=", lastweekStartingTime)
+        .where("userid", "==", this.getuserId)
+        .get();
+      lastWeekSnapShot.forEach(doc => {
+        console.log(doc.data().postedtime);
+        if (doc.data().postedtime > todaysStartingTime) {
+          let post = lastWeekData[0];
+          post += 1;
+          lastWeekData[0] = post;
+        } else if (
+          doc.data().postedtime < todaysStartingTime &&
+          doc.data().postedtime > todaysStartingTime - 86400000
+        ) {
+          let post = lastWeekData[1];
+          post += 1;
+          lastWeekData[1] = post;
+        } else if (
+          doc.data().postedtime < todaysStartingTime - 86400000 &&
+          doc.data().postedtime > todaysStartingTime - 2 * 86400000
+        ) {
+          let post = lastWeekData[2];
+          post += 1;
+          lastWeekData[2] = post;
+        } else if (
+          doc.data().postedtime < todaysStartingTime - 2 * 86400000 &&
+          doc.data().postedtime > todaysStartingTime - 3 * 86400000
+        ) {
+          let post = lastWeekData[3];
+          post += 1;
+          lastWeekData[3] = post;
+        } else if (
+          doc.data().postedtime < todaysStartingTime - 3 * 86400000 &&
+          doc.data().postedtime > todaysStartingTime - 4 * 86400000
+        ) {
+          let post = lastWeekData[4];
+          post += 1;
+          lastWeekData[4] = post;
+        } else if (
+          doc.data().postedtime < todaysStartingTime - 4 * 86400000 &&
+          doc.data().postedtime > todaysStartingTime - 5 * 86400000
+        ) {
+          let post = lastWeekData[5];
+          post += 1;
+          lastWeekData[5] = post;
+        } else if (
+          doc.data().postedtime < todaysStartingTime - 5 * 86400000 &&
+          doc.data().postedtime > todaysStartingTime - 6 * 86400000
+        ) {
+          let post = lastWeekData[6];
+          post += 1;
+          lastWeekData[5] = post;
+        }
+      });
+      console.log(lastWeekData);
 
       let daysSorted = [];
       for (var i = 0; i < 7; i++) {
@@ -436,7 +513,7 @@ export default {
                 "lightBlue",
                 "grey"
               ],
-              data: [0, 0, 0, 0, 1, 0, 0]
+              data: lastWeekData.reverse()
             }
           ]
         },
@@ -560,4 +637,11 @@ export default {
 .div {
   background-color: whitesmoke;
 }
+.blog{
+  display: flex  !important ;
+  flex-wrap: wrap !important;
+  width: 100% !important;
+  flex-direction: row !important;
+}
+
 </style>

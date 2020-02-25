@@ -1,20 +1,15 @@
 <template>
-  <v-card class="card" v-on:click="onclickblog()"  width="30%">
-    
+  <v-card class="card" v-on:click="onclickblog()" width="30%">
     <v-img @click="deleteImage" class="white--text align-end" height="40vh" :src="blog.image[0]">
-      <v-card-title>
-      </v-card-title>
+      <v-card-title></v-card-title>
     </v-img>
     <v-card-title>
-        <!--  {{blog.subtitle}}  -->
+      <!--  {{blog.subtitle}}  -->
     </v-card-title>
-    <v-card-subtitle class=" font-weight-black pb-0">{{blog.subtitle}}</v-card-subtitle>
-        
-      
-    <v-card-actions >
-      
-    </v-card-actions>
-      <p class="float-right pr-10 font-weight-light grey--text " >post by-{{blog.username}}</p>
+    <v-card-subtitle class="font-weight-black pb-0">{{blog.subtitle}}</v-card-subtitle>
+
+    <v-card-actions></v-card-actions>
+    <p class="float-right pr-10 font-weight-light grey--text">post by-{{blog.username}}</p>
   </v-card>
 </template>
 <script>
@@ -22,11 +17,11 @@ import { mapGetters } from "vuex";
 import { db, storage } from "../firebaseInit";
 export default {
   name: "FoodCard",
-  props: ["blog"],
+  props: ["blog", "individualBlogs"],
   data: () => ({
-    username:''
+    username: ""
   }),
- /* computed: {
+  /* computed: {
         ...mapGetters("product", ["getusername"]),
     }, */
   methods: {
@@ -38,8 +33,7 @@ export default {
     },
     deleteImage() {
       console.log(event);
-    },
-   
+    }
   },
   created() {
     /* console.log(this.blog);
@@ -55,7 +49,6 @@ export default {
     .catch(function(error) {
         console.log("Error getting documents: ", error);
     }); */
-   
   }
 };
 </script>
@@ -63,7 +56,7 @@ export default {
 
 
 <style scoped>
-.card{
+.card {
   cursor: pointer;
 }
 </style>
