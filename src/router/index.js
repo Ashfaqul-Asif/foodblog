@@ -12,6 +12,7 @@ import navbar from '@/layout/navbar'
 import blogData from '@/components/blogData'
 import navigationDrawer from '@/layout/navigationDrawer'
 import store from '@/store'
+import posts from '@/components/posts'
 
 Vue.use(VueRouter)
 
@@ -28,9 +29,9 @@ const routes = [
       component: Dashboard
     },
     {
-      path:'/addfoodblog',
-      component:AddFoodBlog
-    
+      path: '/addfoodblog',
+      component: AddFoodBlog
+
     },
     {
       path: '/blogdata',
@@ -40,14 +41,9 @@ const routes = [
       path: '/newsblog/:id',
       name: '',
       component: Newsblog,
-  
-  
-    }
-  /*   {
-      path:'/'
-      component:
-    } */
 
+
+    }
     ]
 
   },
@@ -109,8 +105,8 @@ const routes = [
 
   },
   {
-    path: '/test',
-    component: navigationDrawer,
+    path: '/posts',
+    component: posts,
 
   }
 
@@ -124,24 +120,26 @@ const router = new VueRouter({
 })
 
 
-console.log(store,store.state.product.getisAdmin);
- 
-  router.beforeEach((to, from, next) => {
-    /* if (!store.state.product.isLogin) next({ name: '/dashboard' })
-    else next() */
-    console.log(to);
-    console.log(from);
-    console.log(next);
-    if (to.path==='/') {
-      next()
-      console.log('to');
-    }
-    else if (to.path==='/dashboard' && !store.state.product.isLogin) {
-      next("/")
-      console.log('to');
-       
-    }
-    
+console.log(store, store.state.product.getisAdmin);
+
+router.beforeEach((to, from, next) => {
+  console.log(to);
+  console.log(from);
+  console.log(next);
+  if (to.path === '/') {
     next()
-  })
+    console.log('to');
+  }
+  else if (to.path === '/dashboard' && !store.state.product.isLogin) {
+    next("/")
+    console.log('to');
+  }
+  else if (to.path === '/blogdata' && !store.state.product.isLogin) {
+    next("/")
+  }
+  else if (to.path === '/addfoodblog' && !store.state.product.isLogin) {
+    next("/")
+  }
+  next()
+})
 export default router

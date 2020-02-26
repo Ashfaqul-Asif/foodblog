@@ -17,7 +17,7 @@ import { mapGetters } from "vuex";
 import { db, storage } from "../firebaseInit";
 export default {
   name: "FoodCard",
-  props: ["blog", "individualBlogs"],
+  props: ["blog",],
   data: () => ({
     username: ""
   }),
