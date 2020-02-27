@@ -42,12 +42,12 @@
 </template>
 
 <script>
+
 import { mapGetters, mapMutations } from "vuex";
 export default {
   data: () => ({
     drawer: null,
     items: [
-     
       {
         title: "Login",
         route: "/login",
@@ -86,10 +86,14 @@ export default {
       console.log(this.$store.state);
       console.log(this.$store);
     },
+    
     logout() {
       console.log(event);
-      this.resetState();
-      this.$router.push("/");
+      firebase.auth.signOut().then(() => {
+        this.resetState();
+        alert('logout successfully')
+        this.$router.push("/");
+      });
     },
     ...mapMutations("product", ["resetState"])
   },

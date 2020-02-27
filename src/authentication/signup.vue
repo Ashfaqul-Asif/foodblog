@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <div class="justify-center d-flex my-9">
-      <v-card outlined  width="80vh" height="100%" class="px-6 py-4">
-        <v-card-title  class=" title text justify-center mx-auto my-auto">Registration</v-card-title>
+      <v-card outlined width="80vh" height="100%" class="px-6 py-4">
+        <v-card-title class="title text justify-center mx-auto my-auto">Registration</v-card-title>
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field v-model="name" :counter="10" :rules="nameRules" label="Name" required></v-text-field>
           <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
@@ -33,7 +33,9 @@
 </template>
 
 <script>
-import { db, storage } from "../firebaseInit";
+import { db, storage, auth } from "../firebaseInit";
+import firebase from 'firebase'
+
 export default {
   data: () => ({
     valid: true,
@@ -66,34 +68,40 @@ export default {
       let that = this;
       if (this.$refs.form.validate()) {
         this.snackbar = true;
-        db.collection("registration")
-          .add({
-            email: this.email,
-            name: this.name,
-            password: this.password,
-            isAdmin: false,
-            signuptime:Date.now()
-          })
-     
-          .then(function(docRef) {
-            that.$refs.form.reset();
-         
-            console.log("Document written with ID: ", docRef.id);
-             that.$router.push('/login');
-          })
-          .catch(function(error) {
-            console.error("Error adding document: ", error);
-          });
+        auth.createUserWithEmailAndPassword(this.email, this.password).then(
+          response => {
+            console.log(response.user.uid);
+            alert(`account createded succeessfully`);
+            db.collection("registration")
+              .doc(response.user.uid)
+              .set({
+                email: this.email,
+                name: this.name,
+                isAdmin: false,
+                signuptime: Date.now()
+              })
+              .then(function(docRef) {
+                that.$refs.form.reset();
+                that.$router.push("/login");
+              })
+              .catch(function(error) {
+                console.error("Error adding document: ", error);
+              });
+          },
+          err => {
+            alert(err.message);
+          }
+        );
       }
     }
   }
 };
 </script>
 <style  scoped>
-.title{
-    background-color: #4CAF50;
+.title {
+  background-color: #4caf50;
 
-    color:white
+  color: white;
 }
 </style> >
   

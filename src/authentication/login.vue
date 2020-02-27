@@ -1,7 +1,7 @@
 <template>
   <v-container class="overflow-hidden">
     <div class="justify-center d-flex my-9">
-      <v-card outlined width="80vh" height="100%" class="px-6 py-4 overflow-hidden ">
+      <v-card outlined width="80vh" height="100%" class="px-6 py-4 overflow-hidden">
         <v-card-title class="title text justify-center mx-auto my-auto">Login</v-card-title>
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
@@ -25,7 +25,12 @@
           ></v-checkbox>
 
           <v-btn :disabled="!valid" color="#42A5F5" class="mr-4 white--text" @click="login">Login</v-btn>
-          <v-btn @click="$router.push( '/signup' )" color="success" class=" float-right white--text ">Create Account</v-btn>
+          <v-btn @click="socialLogin">Google</v-btn>
+          <v-btn
+            @click="$router.push( '/signup' )"
+            color="success"
+            class="float-right white--text"
+          >Create Account</v-btn>
         </v-form>
       </v-card>
     </div>
@@ -33,8 +38,9 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
-import { db, storage } from "../firebaseInit";
+import { mapMutations } from "vuex";
+import firebase from 'firebase'
+import { db, storage,auth } from "../firebaseInit";
 export default {
   data: () => ({
     valid: true,
@@ -55,43 +61,53 @@ export default {
         "Min. 8 characters with at least one capital letter, a number and a special character."
     ],
     checkbox: false,
-    isAdmin:false,
-    islogin:false,
-  
+    isAdmin: false,
+    islogin: false
   }),
   methods: {
-    login: function() {
-      db.collection("registration")
-        .where("password", "==", this.password).where("email","==",this.email)
-        .get()
-        .then(snapshot=>{
-             console.log(snapshot);
-             snapshot.forEach(doc => {
-              this.userid=doc.id
-              this.isAdmin=doc.data().isAdmin
-              this.islogin=true
-              this.setState({isAdmin:this.isAdmin})
-              this.setState({isLogin:true})
-              this.setState({userid:doc.id})
-              this.setState({username:doc.data().name})
-             
-              console.log(this.isAdmin);
-              console.log(this.isLogin);
-              console.log(this.userid);
-             });
-            if (snapshot.empty) {
-                console.log("wrong password or email");
-            }
-            else{
-                console.log("login Successfull");
-                  this.$router.push('/');
-            }
-        })
-        .catch(function(error) {
-          console.log("Error getting documents: ", error);
-        });
+    login() {
+      auth.signInWithEmailAndPassword(this.email, this.password).then(
+        response => {
+          console.log(response.user.uid);
+          alert(`account login succeessfully`);
+          this.$router.push('/')
+          db.collection("registration")
+            .get()
+            .then(snapshot => {
+              console.log(snapshot);
+              snapshot.forEach(doc => {
+                this.userid = doc.id;
+                this.isAdmin = doc.data().isAdmin;
+                this.islogin = true;
+                this.setState({ isAdmin: this.isAdmin });
+                this.setState({ isLogin: true });
+                this.setState({ userid: doc.id });
+                this.setState({ username: doc.data().name });
+
+                console.log(this.isAdmin);
+                console.log(this.isLogin);
+                console.log(this.userid);
+               
+              });
+            });
+        },
+        err => {
+          alert(err.message);
+        }
+      );
     },
-    ...mapMutations("product",["setState"])
+    socialLogin(event){
+      console.log(event);
+      const provider=new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider).then((result)=>{
+        this.$router.push('/');
+        console.log(result);
+        console.log(provider);
+      }).catch((err)=>{
+        alert('Oops.'+err.message)
+      })
+    },
+    ...mapMutations("product", ["setState"])
   }
 };
 </script>
@@ -101,6 +117,5 @@ export default {
 
   color: white;
 }
-
 </style> >
   
