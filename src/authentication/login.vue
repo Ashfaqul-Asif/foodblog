@@ -25,7 +25,9 @@
           ></v-checkbox>
 
           <v-btn :disabled="!valid" color="#42A5F5" class="mr-4 white--text" @click="login">Login</v-btn>
-          <v-btn @click="socialLogin">Google</v-btn>
+          <v-btn @click="socialGoogleLogin">Google</v-btn>
+          <v-btn @click="socialFBLogin">Facebook</v-btn>
+          <v-btn @click="socialGithubLogin">Github</v-btn>
           <v-btn
             @click="$router.push( '/signup' )"
             color="success"
@@ -96,12 +98,32 @@ export default {
         }
       );
     },
-    socialLogin(event){
+    socialGoogleLogin(event){
       console.log(event);
       const provider=new firebase.auth.GoogleAuthProvider();
       firebase.auth().signInWithPopup(provider).then((result)=>{
         this.$router.push('/');
         console.log(result);
+        console.log(provider);
+      }).catch((err)=>{
+        alert('Oops.'+err.message)
+      })
+    },
+    socialGithubLogin(){
+      const provider= new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider).then((result)=>{
+        this.$router.push('/')
+         console.log(result);
+        console.log(provider);
+      }).catch((err)=>{
+        alert('Oops.'+err.message)
+      })
+    },
+    socialFBLogin(){
+      const provider= new firebase.auth.FacebookAuthProvider();
+      firebase.auth().signInWithPopup(provider).then((result)=>{
+        this.$router.push('/')
+         console.log(result);
         console.log(provider);
       }).catch((err)=>{
         alert('Oops.'+err.message)
