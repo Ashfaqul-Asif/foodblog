@@ -25,14 +25,24 @@
           ></v-checkbox>
 
           <v-btn :disabled="!valid" color="#42A5F5" class="mr-4 white--text" @click="login">Login</v-btn>
-          <v-btn @click="socialGoogleLogin">Google</v-btn>
-          <v-btn @click="socialFBLogin">Facebook</v-btn>
-          <v-btn @click="socialGithubLogin">Github</v-btn>
           <v-btn
             @click="$router.push( '/signup' )"
             color="success"
             class="float-right white--text"
           >Create Account</v-btn>
+          <v-divider class="mx-4 my-4"></v-divider>
+
+          <div class="my-3">
+            <v-btn @click="socialGoogleLogin" class="text--blue">
+              <i class="mr-2 fab Google fa-google"></i> Sign in with Google
+            </v-btn>
+            <v-btn @click="socialFBLogin">
+              <i class="fab fa-facebook-square mr-2"></i> Sign in with Facebook
+            </v-btn>
+            <v-btn @click="socialGithubLogin">
+              <i class="fab fa-github-square"></i> Sign in with Github
+            </v-btn>
+          </div>
         </v-form>
       </v-card>
     </div>
@@ -41,8 +51,8 @@
 
 <script>
 import { mapMutations } from "vuex";
-import firebase from 'firebase'
-import { db, storage,auth } from "../firebaseInit";
+import firebase from "firebase";
+import { db, storage, auth } from "../firebaseInit";
 export default {
   data: () => ({
     valid: true,
@@ -72,7 +82,8 @@ export default {
         response => {
           console.log(response.user.uid);
           alert(`account login succeessfully`);
-          this.$router.push('/')
+          this.$router.push("/");
+          
           db.collection("registration")
             .get()
             .then(snapshot => {
@@ -89,7 +100,6 @@ export default {
                 console.log(this.isAdmin);
                 console.log(this.isLogin);
                 console.log(this.userid);
-               
               });
             });
         },
@@ -98,36 +108,71 @@ export default {
         }
       );
     },
-    socialGoogleLogin(event){
+    socialGoogleLogin(event) {
       console.log(event);
-      const provider=new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithPopup(provider).then((result)=>{
-        this.$router.push('/');
-        console.log(result);
-        console.log(provider);
-      }).catch((err)=>{
-        alert('Oops.'+err.message)
-      })
+      const provider = new firebase.auth.GoogleAuthProvider();
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(result => {
+          this.$router.push("/");
+          console.log(result.user.uid);
+          console.log(result.user.displayName);
+          console.log(result.user.email);
+          let docRef = db.collection("registration").doc(id);
+          docRef
+            .get()
+            .then((doc) =>{
+              if (doc.exists) {
+                console.log("Document data:", doc.data());
+              } else {
+                console.log(result.user.id);
+                db.collection("registration").doc(result.user.id).set({
+                        email: this.email,
+                name: this.name,
+                isAdmin: false,
+                signuptime: Date.now()
+                })
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+              }
+            })
+            .catch(function(error) {
+              console.log("Error getting document:", error);
+            });
+        })
+        .catch(err => {
+          alert("Oops." + err.message);
+        });
     },
-    socialGithubLogin(){
-      const provider= new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithPopup(provider).then((result)=>{
-        this.$router.push('/')
-         console.log(result);
-        console.log(provider);
-      }).catch((err)=>{
-        alert('Oops.'+err.message)
-      })
+    socialGithubLogin() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(result => {
+          this.$router.push("/");
+          console.log(result.uid);
+          console.log(result.uid);
+          console.log(provider);
+        })
+        .catch(err => {
+          alert("Oops." + err.message);
+        });
     },
-    socialFBLogin(){
-      const provider= new firebase.auth.FacebookAuthProvider();
-      firebase.auth().signInWithPopup(provider).then((result)=>{
-        this.$router.push('/')
-         console.log(result);
-        console.log(provider);
-      }).catch((err)=>{
-        alert('Oops.'+err.message)
-      })
+    socialFBLogin() {
+      const provider = new firebase.auth.FacebookAuthProvider();
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(result => {
+          this.$router.push("/");
+          console.log(result);
+          console.log(provider);
+        })
+        .catch(err => {
+          alert("Oops." + err.message);
+        });
     },
     ...mapMutations("product", ["setState"])
   }
@@ -138,6 +183,9 @@ export default {
   background-color: #42a5f5;
 
   color: white;
+}
+.Google {
+  color: #42a5f5;
 }
 </style> >
   
