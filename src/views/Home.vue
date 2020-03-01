@@ -1,10 +1,9 @@
 <template>
   <div class="home">
     <v-container>
-      <v-layout class="d-flex flex-wrap justify-space-between ">
-        <FoodCard class="mx-3 my-3  " v-for="blog in approvedBlogs" :key="blog.id" :blog="blog" />
- <!--        <FoodCard class="mx-3 my-3  " v-for="blog in getPosts" :key="blog.id" :blog="blog" /> -->
-      
+      <v-layout class="d-flex flex-wrap justify-space-between">
+        <FoodCard class="mx-3 my-3" v-for="blog in approvedBlogs" :key="blog.id" :blog="blog" />
+        <!--        <FoodCard class="mx-3 my-3  " v-for="blog in getPosts" :key="blog.id" :blog="blog" /> -->
       </v-layout>
     </v-container>
   </div>
@@ -25,25 +24,25 @@ export default {
     return {};
   },
   methods: {
-    ...mapActions("product", ["postBlogs","fetchRegistrationData"]),
-    ...mapActions("jsonplaceholder",["fetchPost"])
+    ...mapActions("product", ["postBlogs", "fetchRegistrationData"]),
+    ...mapActions("jsonplaceholder", ["fetchPost"])
   },
   computed: {
-    ...mapGetters("product", ["getBlogs","getRegistrationData"]),
-    ...mapGetters("jsonplaceholder",["getPosts"]),
-     approvedBlogs() {
+    ...mapGetters("product", ["getBlogs", "getRegistrationData"]),
+    ...mapGetters("jsonplaceholder", ["getPosts"]),
+    approvedBlogs() {
       console.log(this.getBlogs);
       let x = this.getBlogs.filter(blog => blog.isApproved);
       console.log(x);
       return x;
-    } 
+    }
   },
   created() {
     //console.log(this.getBlogs);
     //console.log(this.getPosts);
     this.postBlogs();
-    this.fetchRegistrationData()
-    this.fetchPost()
+    this.fetchRegistrationData();
+    this.fetchPost();
     console.log(this.getPosts);
   }
 };

@@ -42,8 +42,8 @@
 </template>
 
 <script>
-
 import { mapGetters, mapMutations } from "vuex";
+import { db, storage, auth } from "../firebaseInit";
 export default {
   data: () => ({
     drawer: null,
@@ -86,12 +86,13 @@ export default {
       console.log(this.$store.state);
       console.log(this.$store);
     },
-    
-    logout() {
+
+    async logout() {
       console.log(event);
-      firebase.auth.signOut().then(() => {
+
+      auth.signOut().then(() => {
         this.resetState();
-        alert('logout successfully')
+        alert("logout successfully");
         this.$router.push("/");
       });
     },

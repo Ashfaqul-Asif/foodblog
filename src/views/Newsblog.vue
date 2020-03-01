@@ -4,7 +4,7 @@
       <v-card class="overflow-hidden pb-10">
         <v-row class="mx-4">
           <v-img
-            @click  ="deleteImage(index)"
+            @click="deleteImage(index)"
             v-for="(src, index) in src"
             :key="index"
             class="mx-1 my-5"
@@ -51,6 +51,23 @@
         >
           <v-icon>mdi-delete</v-icon>
         </v-btn>
+        <v-divider class="mx-4 my-2"></v-divider>
+        <v-card class="px-3 mx-4 my-1 elevation-1">
+          <form class="d-flex">
+            <v-text-field v-model="comment" label="write a comment" required></v-text-field>
+            <v-btn class="commentButton" bottom fab small elevation="0" @click="postComment">
+              <v-icon>mdi-message-plus-outline</v-icon>
+            </v-btn>
+          </form>
+        </v-card>
+        <v-card class="px-3 mx-4 my-1 elevation-1">
+          <p class="px-3 pt-3">
+            <v-icon>mdi-account</v-icon>name
+          </p>
+          <p
+            class="px-3 pb-3"
+          >Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sint in debitis laboriosam rem expedita voluptas incidunt. Nesciunt at veritatis inventore, vitae magnam cumque quibusdam culpa ducimus debitis, nam eaque nobis.</p>
+        </v-card>
       </v-card>
     </v-container>
   </div>
@@ -77,7 +94,9 @@ export default {
       editblog: false,
       blogref: {},
       image: [],
-      isAdmin: false
+      isAdmin: false,
+      comment: "",
+      comments:[]
     };
   },
   watch: {
@@ -175,8 +194,7 @@ export default {
               image: this.src
             });
           });
-      }
-      else return 0
+      } else return 0;
     },
     editTitle(event) {
       if (!this.getisAdmin && this.getisLogin) {
@@ -184,21 +202,60 @@ export default {
       }
     },
     editSubtitle(event) {
-      if (!this.getisAdmin && this.getisLogin ) {
+      if (!this.getisAdmin && this.getisLogin) {
         this.editSubtitlefield = true;
       }
     },
     editTextarea(event) {
-      if (!this.getisAdmin && this.getisLogin ) {
+      if (!this.getisAdmin && this.getisLogin) {
         this.editTextareafield = true;
       }
+    },
+    postComment(event) {
+      console.log(this.comment);
+      let comments = this.commentsRef(this.$route.params.id);
+      comments.add({
+        comment: this.comment,
+        commentedById: this.getuserId,
+        commentedByName: this.getUserName,
+        commentedTime: Date.now()
+      });
+      this.comment = "";
+    },
+    commentsRef(id) {
+      return db
+        .collection("addBlogs")
+        .doc(id)
+        .collection("comments");
+    },
+    async fetchComments() {
+      let commentsData=[]
+      let comments = this.commentsRef(this.$route.params.id);
+      console.log(comments);
+      try {
+        let commentsSnapshot = await comments.get();
+      console.log(commentsSnapshot);
+      commentsSnapshot.forEach(doc => {
+        this.comments.push(doc.data());
+        
+      });
+      } catch (error) {
+        console.log(error.message);
+      }
+      console.log(this.comments);
+      
     }
   },
   computed: {
-    ...mapGetters("product", ["getisAdmin","getisLogin"])
+    ...mapGetters("product", [
+      "getisAdmin",
+      "getisLogin",
+      "getuserId",
+      "getUserName"
+    ])
   },
   created() {
-
+    this.fetchComments();
     console.log(this.$route.params.id);
     let that = this;
     db.collection("addBlogs")
@@ -237,5 +294,8 @@ export default {
 }
 .upload {
   visibility: hidden;
+}
+.commentButton {
+  top: 15px !important;
 }
 </style>

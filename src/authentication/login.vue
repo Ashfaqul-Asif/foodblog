@@ -83,7 +83,7 @@ export default {
           console.log(response.user.uid);
           alert(`account login succeessfully`);
           this.$router.push("/");
-          
+
           db.collection("registration")
             .get()
             .then(snapshot => {
@@ -108,42 +108,38 @@ export default {
         }
       );
     },
-    socialGoogleLogin(event) {
+    async socialGoogleLogin(event) {
       console.log(event);
       const provider = new firebase.auth.GoogleAuthProvider();
-      firebase
-        .auth()
-        .signInWithPopup(provider)
-        .then(result => {
-          this.$router.push("/");
+      try {
+        let result = await firebase.auth().signInWithPopup(provider);
+        console.log(result.user.uid);
+        console.log(result.user.displayName);
+        console.log(result.user.email);
+        this.setState({ isAdmin: false });
+        this.setState({ isLogin: true });
+        this.setState({ userid: result.user.uid});
+        this.setState({ username:result.user.displayName});
+        let doc = await db.collection("registration").doc(result.user.uid);
+        if (doc.exists) {
+          console.log("User exist => ", doc.data());
+        } else {
           console.log(result.user.uid);
-          console.log(result.user.displayName);
-          console.log(result.user.email);
-          let docRef = db.collection("registration").doc(id);
-          docRef
-            .get()
-            .then((doc) =>{
-              if (doc.exists) {
-                console.log("Document data:", doc.data());
-              } else {
-                console.log(result.user.id);
-                db.collection("registration").doc(result.user.id).set({
-                        email: this.email,
-                name: this.name,
-                isAdmin: false,
-                signuptime: Date.now()
-                })
-                // doc.data() will be undefined in this case
-                console.log("No such document!");
-              }
-            })
-            .catch(function(error) {
-              console.log("Error getting document:", error);
+          let newUser = await db
+            .collection("registration")
+            .doc(result.user.uid)
+            .set({
+              email: result.user.email,
+              name: result.user.displayName,
+              isAdmin: false,
+              signuptime: Date.now()
             });
-        })
-        .catch(err => {
-          alert("Oops." + err.message);
-        });
+          console.log("User saved", newUser);
+        }
+        this.$router.push("/");
+      } catch (error) {
+        console.log("Error => ", error.message);
+      }
     },
     socialGithubLogin() {
       const provider = new firebase.auth.GoogleAuthProvider();
