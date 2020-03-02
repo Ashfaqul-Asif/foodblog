@@ -33,13 +33,13 @@
           <v-divider class="mx-4 my-4"></v-divider>
 
           <div class="my-3">
-            <v-btn @click="socialGoogleLogin" class="text--blue">
+            <v-btn block depressed @click="socialGoogleLogin" class="text--blue">
               <i class="mr-2 fab Google fa-google"></i> Sign in with Google
             </v-btn>
-            <v-btn @click="socialFBLogin">
+            <v-btn depressed block @click="socialFBLogin">
               <i class="fab fa-facebook-square mr-2"></i> Sign in with Facebook
             </v-btn>
-            <v-btn @click="socialGithubLogin">
+            <v-btn depressed block @click="socialGithubLogin">
               <i class="fab fa-github-square"></i> Sign in with Github
             </v-btn>
           </div>

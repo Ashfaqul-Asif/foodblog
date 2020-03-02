@@ -53,20 +53,24 @@
         </v-btn>
         <v-divider class="mx-4 my-2"></v-divider>
         <v-card class="px-3 mx-4 my-1 elevation-1">
-          <form class="d-flex">
+          <form v-if="getisLogin" class="d-flex">
             <v-text-field v-model="comment" label="write a comment" required></v-text-field>
             <v-btn class="commentButton" bottom fab small elevation="0" @click="postComment">
               <v-icon>mdi-message-plus-outline</v-icon>
             </v-btn>
           </form>
         </v-card>
-        <v-card class="px-3 mx-4 my-1 elevation-1">
+        <v-card
+          class="px-3 mx-4 commentBox my-1 elevation-1"
+          v-for="comment in formattedComments"
+          :key="comment.id"
+        >
           <p class="px-3 pt-3">
-            <v-icon>mdi-account</v-icon>name
+            <v-icon>mdi-account</v-icon>
+            {{comment.commentedByName}}
           </p>
-          <p
-            class="px-3 pb-3"
-          >Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sint in debitis laboriosam rem expedita voluptas incidunt. Nesciunt at veritatis inventore, vitae magnam cumque quibusdam culpa ducimus debitis, nam eaque nobis.</p>
+          <p class="px-3 pb-3">{{comment.comment}}</p>
+          <p class="pb-2 time float-right">{{comment.commentedTime}}</p>
         </v-card>
       </v-card>
     </v-container>
@@ -74,6 +78,7 @@
 </template>
 
 <script>
+import moment from "moment";
 import { db, storage } from "@/firebaseInit";
 import { mapGetters, mapActions } from "vuex";
 import { functions } from "firebase";
@@ -96,7 +101,7 @@ export default {
       image: [],
       isAdmin: false,
       comment: "",
-      comments:[]
+      comments: []
     };
   },
   watch: {
@@ -221,6 +226,7 @@ export default {
         commentedTime: Date.now()
       });
       this.comment = "";
+      this.fetchComments()
     },
     commentsRef(id) {
       return db
@@ -229,24 +235,28 @@ export default {
         .collection("comments");
     },
     async fetchComments() {
-      let commentsData=[]
+      let commentsData = [];
       let comments = this.commentsRef(this.$route.params.id);
       console.log(comments);
       try {
         let commentsSnapshot = await comments.get();
-      console.log(commentsSnapshot);
-      commentsSnapshot.forEach(doc => {
-        this.comments.push(doc.data());
-        
-      });
+        console.log(commentsSnapshot);
+        commentsSnapshot.forEach(doc => {
+          this.comments.push(doc.data());
+        });
       } catch (error) {
         console.log(error.message);
       }
       console.log(this.comments);
-      
     }
   },
   computed: {
+    formattedComments() {
+      return this.comments.map(comment => {
+        comment.commentedTime = moment(comment.commentedTime).fromNow();
+        return comment;
+      });
+    },
     ...mapGetters("product", [
       "getisAdmin",
       "getisLogin",
@@ -255,6 +265,7 @@ export default {
     ])
   },
   created() {
+    console.log(moment(1583057710380).fromNow());
     this.fetchComments();
     console.log(this.$route.params.id);
     let that = this;
@@ -280,13 +291,14 @@ export default {
         console.log("Error getting documents: ", error);
       });
     console.log(this.getisAdmin);
+    console.log(this.comments);
   }
 };
 </script>
 
 <style  scoped>
 .fab {
-  bottom: 3px;
+  top: 10px !important;
   right: 10px;
 }
 .input {
@@ -295,7 +307,11 @@ export default {
 .upload {
   visibility: hidden;
 }
-.commentButton {
-  top: 15px !important;
+.commentBox {
+  overflow: hidden !important;
+}
+.time {
+  color: grey;
+  font-size: small;
 }
 </style>

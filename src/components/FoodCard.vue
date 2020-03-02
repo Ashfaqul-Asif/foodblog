@@ -1,5 +1,5 @@
 <template>
-  <v-card class="card" v-on:click="onclickblog()" width="30%">
+  <v-card class="card" elevation="0" v-on:click="onclickblog()" width="30%">
     <v-img @click="deleteImage" class="white--text align-end" height="40vh" :src="blog.image[0]">
       <v-card-title></v-card-title>
     </v-img>
