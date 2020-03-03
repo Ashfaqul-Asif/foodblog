@@ -256,28 +256,29 @@ export default {
       confirm("Are you sure you want to approve this Blog") &&
         db
           .collection("addBlogs")
-          .doc(item.id)
+          .doc(item.blogid)
           .update({
             isApproved: true,
             approvedtime: Date.now()
           })
-          .then(function() {
+          .then(()=> {
             console.log("Succesfully updated Blogs");
-            location.reload();
+            this.onChangeComboBox(item);
             return false;
           });
     },
 
     deleteItem(item) {
       /* const index = this.getBlogs.indexOf(item); */
-      console.log(item.id);
+      console.log(item.blogid);
       confirm("Are you sure you want to delete this Blog?") &&
         db
           .collection("addBlogs")
-          .doc(item.id)
+          .doc(item.blogid)
           .delete()
-          .then(function() {
+          .then(()=> {
             console.log("Document successfully deleted!");
+            this.onChangeComboBox(item)
           })
           .catch(function(error) {
             console.error("Error removing document: ", error);

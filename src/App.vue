@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="app">
     <router-view></router-view>
   </v-app>
 </template>
@@ -67,5 +67,10 @@ export default {
   } */
 };
 </script>
-<style >
+<style>
+.v-application--wrap{
+  background-color: whitesmoke
+ 
+}
 </style>
+

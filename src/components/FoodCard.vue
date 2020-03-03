@@ -1,5 +1,5 @@
 <template>
-  <v-card class="card" elevation="0" v-on:click="onclickblog()" width="30%">
+  <v-card class="card" elevation="0" v-on:click="onclickblog()">
     <v-img @click="deleteImage" class="white--text align-end" height="40vh" :src="blog.image[0]">
       <v-card-title></v-card-title>
     </v-img>
@@ -17,7 +17,7 @@ import { mapGetters } from "vuex";
 import { db, storage } from "../firebaseInit";
 export default {
   name: "FoodCard",
-  props: ["blog",],
+  props: ["blog"],
   data: () => ({
     username: ""
   }),
@@ -58,5 +58,7 @@ export default {
 <style scoped>
 .card {
   cursor: pointer;
+  min-width: 30% !important;
+  max-width: 65% !important;
 }
 </style>

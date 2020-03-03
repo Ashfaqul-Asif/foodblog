@@ -226,7 +226,7 @@ export default {
         commentedTime: Date.now()
       });
       this.comment = "";
-      this.fetchComments()
+      this.fetchComments();
     },
     commentsRef(id) {
       return db

@@ -10,7 +10,7 @@ import signup from '@/authentication/signup'
 import login from '@/authentication/login'
 import navbar from '@/layout/navbar'
 import blogData from '@/components/blogData'
-import navigationDrawer from '@/layout/navigationDrawer'
+import catBlog from '@/components/catBlog'
 import store from '@/store'
 import posts from '@/components/posts'
 
@@ -41,7 +41,10 @@ const routes = [
       path: '/newsblog/:id',
       name: '',
       component: Newsblog,
-
+    },
+    {
+      path:'/news',
+      component:catBlog,
 
     }
     ]

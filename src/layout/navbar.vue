@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-toolbar>
+    <v-toolbar elevation="1" >
       <v-app-bar-nav-icon @click="drawer=!drawer"></v-app-bar-nav-icon>
-      <v-btn v-if="!getisLogin" @click="login()" class="btn blue--text">Login</v-btn>
+      <v-btn v-if="!getisLogin" @click="login()" class="btn depressed blue--text">Login</v-btn>
       <v-btn v-else @click="logout()" class="btn blue--red">Logout</v-btn>
     </v-toolbar>
 

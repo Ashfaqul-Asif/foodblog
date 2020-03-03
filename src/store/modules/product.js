@@ -6,7 +6,8 @@ const state = {
     userid: '',
     loading: true,
     username:'',
-    RegistrationData:[]
+    RegistrationData:[],
+    CategoriesData:[]
 
 }
 const actions = {
@@ -77,9 +78,15 @@ const actions = {
         });
 
         commit("setRegistrationData",regData)
+    },
+    fetchCategoriesData:async({commit})=>{
+        let catData=[]
+        let categoryDatas= await db.collection("categories").get()
+        categoryDatas.forEach(doc =>{
+            catData.push(doc.data())
+        })
+        commit("setCategoriesData",catData)
     }
-    
-    
 }
 
 const getters = {
@@ -89,7 +96,8 @@ const getters = {
     getuserId: state => state.userid,
     getLoading: state => state.loading,
     getUserName:state=>state.username,
-    getRegistrationData:state=>state.RegistrationData 
+    getRegistrationData:state=>state.RegistrationData,
+    getCategoriesData:state=>state.CategoriesData
 }
 const mutations = {
     setState: (state, payload) => {
@@ -104,7 +112,8 @@ const mutations = {
     setBlogs: (state, payload) => state.Blogs = payload,
     setLoading: (state, payload) => state.loading = payload,
     setName:(state,payload)=>state.name=payload,
-    setRegistrationData:(state,payload)=>state.RegistrationData=payload
+    setRegistrationData:(state,payload)=>state.RegistrationData=payload,
+    setCategoriesData:(state,payload)=>state.CategoriesData=payload
 }
 export default {
     state,
