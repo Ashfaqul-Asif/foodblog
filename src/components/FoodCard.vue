@@ -58,7 +58,8 @@ export default {
 <style scoped>
 .card {
   cursor: pointer;
-  min-width: 30% !important;
-  max-width: 65% !important;
+  grid-template-columns: repeat(auto-fit);
+  width: 30%
+  /* grid-template-columns: repeat(auto-fill,minmax(250px,1fr)) !important; */
 }
 </style>

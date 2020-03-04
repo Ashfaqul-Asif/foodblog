@@ -7,7 +7,8 @@ const state = {
     loading: true,
     username:'',
     RegistrationData:[],
-    CategoriesData:[]
+    CategoriesData:[],
+    selectedCat:''
 
 }
 const actions = {
@@ -97,7 +98,8 @@ const getters = {
     getLoading: state => state.loading,
     getUserName:state=>state.username,
     getRegistrationData:state=>state.RegistrationData,
-    getCategoriesData:state=>state.CategoriesData
+    getCategoriesData:state=>state.CategoriesData,
+    getSelectedCat:state=>state.selectedCat
 }
 const mutations = {
     setState: (state, payload) => {

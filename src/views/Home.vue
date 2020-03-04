@@ -11,7 +11,7 @@
         </div>
       </div>
 
-      <v-layout class="d-flex flex-wrap justify-space-between my-10">
+      <v-layout class="d-flex card flex-wrap  my-10">
         <FoodCard  class="mx-3 my-3" v-for="blog in approvedBlogs" :key="blog.id" :blog="blog" />
         <!--        <FoodCard class="mx-3 my-3  " v-for="blog in getPosts" :key="blog.id" :blog="blog" /> -->
       </v-layout>
@@ -73,13 +73,14 @@ export default {
     ...mapActions("jsonplaceholder", ["fetchPost"]),
     onclick(event){
      console.log(event);
+     this.$store.commit('product/setState',{selectedCat:event })
      this.selectedcat=event
      console.log(this.selectedcat);
      this.$router.push('/news')
     }
   },
   computed: {
-    ...mapGetters("product", ["getBlogs", "getRegistrationData","getCategoriesData"]),
+    ...mapGetters("product", ["getBlogs", "getRegistrationData","getCategoriesData",]),
     ...mapGetters("jsonplaceholder", ["getPosts"]),
     approvedBlogs() {
       console.log(this.getBlogs);
@@ -104,4 +105,5 @@ export default {
 .home {
   background-color: #f4f5f7;
 }
+
 </style>

@@ -116,15 +116,22 @@ export default {
         console.log(result.user.uid);
         console.log(result.user.displayName);
         console.log(result.user.email);
-        this.setState({ isAdmin: false });
-        this.setState({ isLogin: true });
-        this.setState({ userid: result.user.uid});
-        this.setState({ username:result.user.displayName});
-        let doc = await db.collection("registration").doc(result.user.uid);
+
+        let doc = await db.collection("registration").doc(result.user.uid).get();
+        console.log(doc);
+        console.log(doc.exist);
         if (doc.exists) {
-          console.log("User exist => ", doc.data());
+         this.setState({ isAdmin: doc.data().isAdmin });
+          this.setState({ isLogin: true });
+          this.setState({ userid: result.user.uid });
+          this.setState({ username: result.user.displayName }); 
+          console.log("User exist => ", doc.data().isAdmin);
         } else {
           console.log(result.user.uid);
+          this.setState({ isAdmin: false });
+          this.setState({ isLogin: true });
+          this.setState({ userid: result.user.uid });
+          this.setState({ username: result.user.displayName });
           let newUser = await db
             .collection("registration")
             .doc(result.user.uid)
@@ -134,7 +141,7 @@ export default {
               isAdmin: false,
               signuptime: Date.now()
             });
-          console.log("User saved", newUser);
+          console.log("User saved");
         }
         this.$router.push("/");
       } catch (error) {

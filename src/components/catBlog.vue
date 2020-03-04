@@ -13,7 +13,7 @@ export default {
   components: {
     FoodCard
   },
-  props: ["selectedcat"],
+ 
   data() {
     return {};
   },
@@ -21,15 +21,16 @@ export default {
     ...mapGetters("product", [
       "getBlogs",
       "getRegistrationData",
-      "getCategoriesData"
+      "getCategoriesData",
+      "getSelectedCat"
     ]),
     filterBlogs() {
-      return this.getBlogs.filter(blog => blog.type === "Bengali");
+      return this.getBlogs.filter(blog => blog.type == this.getSelectedCat);
     }
   },
   methods: {},
   created() {
-    console.log(this.selectedcat);
+  
   }
 };
 </script>

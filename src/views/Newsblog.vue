@@ -16,6 +16,7 @@
           <input type="file" @change="uploadFiles" multiple />
         </div>
         <div class="mx-3">
+           <p class="mb-3 blue-grey--text float-right" >{{postedTime}}</p>
           <v-card-title v-if="!editTitlefield" @dblclick="editTitle">{{title}}</v-card-title>
           <v-text-field v-else @dblclick="editTitlefield=false" v-model="title" label="edit title"></v-text-field>
           <div class="my-2"></div>
@@ -37,6 +38,7 @@
             <div v-else @dblclick="editTextareafield=false">
               <v-textarea label="Edit textarea" v-model="textarea"></v-textarea>
             </div>
+           
           </v-card-text>
         </div>
         <v-btn
@@ -101,7 +103,8 @@ export default {
       image: [],
       isAdmin: false,
       comment: "",
-      comments: []
+      comments: [],
+      postedTime:""
     };
   },
   watch: {
@@ -282,6 +285,8 @@ export default {
         that.title = Data.title;
         that.textarea = Data.textarea;
         that.src = Data.image;
+        console.log(Data.postedtime);
+        that.postedTime= moment(Data.postedtime).fromNow()
         console.log(Data);
         console.log(Data.image);
         console.log(that.src);
