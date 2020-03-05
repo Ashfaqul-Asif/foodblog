@@ -16,7 +16,17 @@
           <input type="file" @change="uploadFiles" multiple />
         </div>
         <div class="mx-3">
-           <p class="mb-3 blue-grey--text float-right" >{{postedTime}}</p>
+          <p class="mb-3 blue-grey--text float-right">{{postedTime}}</p>
+          <div class="rating">
+            <h2>Star Rating</h2>
+            <span
+              :class="{checked:star===1}"
+              @click="rating(index)"
+              v-for="(star,index) in stars"
+              :key="index"
+              class="fa fa-star"
+            ></span>
+          </div>
           <v-card-title v-if="!editTitlefield" @dblclick="editTitle">{{title}}</v-card-title>
           <v-text-field v-else @dblclick="editTitlefield=false" v-model="title" label="edit title"></v-text-field>
           <div class="my-2"></div>
@@ -38,7 +48,6 @@
             <div v-else @dblclick="editTextareafield=false">
               <v-textarea label="Edit textarea" v-model="textarea"></v-textarea>
             </div>
-           
           </v-card-text>
         </div>
         <v-btn
@@ -89,6 +98,7 @@ export default {
   components: {
     navbar
   },
+
   data() {
     return {
       title: "",
@@ -104,7 +114,8 @@ export default {
       isAdmin: false,
       comment: "",
       comments: [],
-      postedTime:""
+      postedTime: "",
+      stars: [0, 0, 0, 0, 0]
     };
   },
   watch: {
@@ -134,6 +145,26 @@ export default {
     }
   },
   methods: {
+    rating(index) {
+      console.log(index);
+      this.stars = this.stars.map((el, i) => {
+        console.log(i, index);
+        if (i <= index) {
+          el = 1;
+          return 1;
+        }
+        return 0;
+      });
+    },
+    addRating() {
+      let x = this.stars.filter(star => star === 1);
+       let ratings = this.commentsRef(this.$route.params.id);
+      ratings.add({
+        rating: x.length,
+        userid:getuserId
+      });
+    },
+
     deleteBlog(event) {
       if (isAdmin) {
         db.collection("addBlogs")
@@ -268,6 +299,8 @@ export default {
     ])
   },
   created() {
+    let x = this.stars.filter(star => star === 1);
+    console.log(x.length);
     console.log(moment(1583057710380).fromNow());
     this.fetchComments();
     console.log(this.$route.params.id);
@@ -286,7 +319,7 @@ export default {
         that.textarea = Data.textarea;
         that.src = Data.image;
         console.log(Data.postedtime);
-        that.postedTime= moment(Data.postedtime).fromNow()
+        that.postedTime = moment(Data.postedtime).fromNow();
         console.log(Data);
         console.log(Data.image);
         console.log(that.src);
@@ -318,5 +351,8 @@ export default {
 .time {
   color: grey;
   font-size: small;
+}
+.checked {
+  color: orange;
 }
 </style>

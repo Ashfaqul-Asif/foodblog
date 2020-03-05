@@ -9,6 +9,7 @@
     <v-card-subtitle class="font-weight-black pb-0">{{blog.subtitle}}</v-card-subtitle>
 
     <v-card-actions></v-card-actions>
+
     <p class="float-right pr-10 font-weight-light grey--text">post by-{{blog.username}}</p>
   </v-card>
 </template>
@@ -59,7 +60,7 @@ export default {
 .card {
   cursor: pointer;
   grid-template-columns: repeat(auto-fit);
-  width: 30%
+  width: 30%;
   /* grid-template-columns: repeat(auto-fill,minmax(250px,1fr)) !important; */
 }
 </style>
