@@ -20,8 +20,9 @@
           <div class="rating">
             <h2>Star Rating</h2>
             <span
+             
               :class="{checked:star===1}"
-              @click="rating(index)"
+             @click="rating(index)"
               v-for="(star,index) in stars"
               :key="index"
               class="fa fa-star"
@@ -155,14 +156,16 @@ export default {
         }
         return 0;
       });
+      this.addRating()
     },
     addRating() {
       let x = this.stars.filter(star => star === 1);
-       let ratings = this.commentsRef(this.$route.params.id);
+      console.log(x.length);
+        let ratings=db.collection("addBlogs").doc(this.$route.params.id).collection("ratings"); 
       ratings.add({
         rating: x.length,
-        userid:getuserId
-      });
+        userid:this.getuserId
+      }); 
     },
 
     deleteBlog(event) {
